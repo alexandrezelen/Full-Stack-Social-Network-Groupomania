@@ -1,13 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const schema = require('../middlewares/validator');
 
-const userCtrl = require('../controllers/user');
+const postCtrl = require('../controllers/post');
 
-router.post('/signup', schema, userCtrl.signup);
-// router.post('/login', auth, userCtrl.login);
+router.post('/', postCtrl.createPost);
 // router.get('/getProfile', auth, userCtrl.getUser);
 // router.get('/updateUser', auth, userCtrl.updateUser);
 // router.get('/deleteUser', auth, userCtrl.deleteUser);
+router.get('/', postCtrl.getAllPosts);
 
 module.exports = router;

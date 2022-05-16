@@ -5,6 +5,9 @@ const dotenv = require('dotenv').config();
 const path = require('path');
 const db = require('./models');
 
+const postRoutes = require('./routes/post');
+//const userRoutes = require('./routes/user');
+
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
@@ -13,6 +16,8 @@ app.use((req, res, next) => {
 });
 
 app.use(express.json());
+app.use('/post', postRoutes);
+//app.use('/user', userRoutes);
 
 // to auto reset : { force: true }
 // to modify only the specified { alter: true }
