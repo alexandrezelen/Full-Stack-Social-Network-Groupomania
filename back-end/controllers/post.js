@@ -10,3 +10,13 @@ exports.getAllPosts = async (req, res, next) => {
     const post = await Posts.findAll()
     res.json(post);
 };
+
+exports.deletePost = async (req, res, next) => {
+    const post = await Posts.findAll()
+    res.json(post);
+};
+
+exports.updatePost = async (req, res, next) => {
+    const post = await Posts.findAll()
+    res.json(post);
+};

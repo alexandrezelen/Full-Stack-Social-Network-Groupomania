@@ -4,6 +4,7 @@ const app = express();
 const dotenv = require('dotenv').config();
 const path = require('path');
 const db = require('./models');
+const cors = require('cors')
 
 const postRoutes = require('./routes/post');
 //const userRoutes = require('./routes/user');
@@ -16,6 +17,8 @@ app.use((req, res, next) => {
 });
 
 app.use(express.json());
+app.use(cors())
+
 app.use('/post', postRoutes);
 //app.use('/user', userRoutes);
 

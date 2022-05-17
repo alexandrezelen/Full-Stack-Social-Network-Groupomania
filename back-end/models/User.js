@@ -9,12 +9,20 @@ module.exports = (sequelize, Datatypes) => {
         firstname: {
             type: Datatypes.STRING(100),
             allowNull: false,
-            require: true
+            require: true,
+            validate: {
+                isAlpha: true,            // will only allow letters                isLowercase: true,
+                notEmpty: true          // don't allow empty strings
+            }
         },
         lastname: {
             type: Datatypes.STRING(100),
             allowNull: false,
-            require: true
+            require: true,
+            validate: {
+                isAlpha: true,            // will only allow letters                isLowercase: true,
+                notEmpty: true,           // don't allow empty strings
+            }
         },
         email: {
             type: Datatypes.STRING(150),
@@ -30,14 +38,15 @@ module.exports = (sequelize, Datatypes) => {
             type: Datatypes.STRING(150),
             allowNull: false,
             require: true,
-            validate:{
-                isLowercase: true,        // checks for lowercase
-                isUppercase: true,        // checks for uppercase
-                min: 8,                  // only allow values >= 8
-                isAlphanumeric: true,     // will only allow alphanumeric characters, so "_abc" will fail
-                notEmpty: true,           // don't allow empty strings
-            }
-        }
+            // validate: {
+            //     // isLowercase: true,        // checks for lowercase
+            //     // isUppercase: true,        // checks for uppercase
+            //     // min: 8,                  // only allow values >= 8
+            //     // isAlphanumeric: true,     // will only allow alphanumeric characters, so "_abc" will fail
+            //     // notEmpty: true,           // don't allow empty strings
+            // }
+        },
+        
     },
         { timestamps: false });
 
