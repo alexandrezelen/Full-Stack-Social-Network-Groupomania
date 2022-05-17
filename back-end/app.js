@@ -7,6 +7,7 @@ const db = require('./models');
 const cors = require('cors')
 
 const postRoutes = require('./routes/post');
+const commentRoutes = require('./routes/comment');
 //const userRoutes = require('./routes/user');
 
 app.use((req, res, next) => {
@@ -20,6 +21,7 @@ app.use(express.json());
 app.use(cors())
 
 app.use('/post', postRoutes);
+app.use('/comment', commentRoutes);
 //app.use('/user', userRoutes);
 
 // to auto reset : { force: true }

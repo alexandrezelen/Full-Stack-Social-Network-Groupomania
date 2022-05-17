@@ -11,12 +11,11 @@ module.exports = (sequelize, Datatypes) => {
             allowNull: false,
             require: true
         },
-        userId: {
-            type: Datatypes.STRING,
-            allowNull: false,
-            require: true
-            // validate
-        },
+        // userId: {
+        //     type: Datatypes.STRING,
+        //     allowNull: false,
+        //     require: true
+        // },
         postId: {
             type: Datatypes.STRING,
             allowNull: false,
