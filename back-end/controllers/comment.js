@@ -1,15 +1,15 @@
 const { Comments } = require('../models');
 
-exports.createComment = async (req, res, next) => {
-    const comment = req.body;
-    await Comments.create(comment);
-    res.json(comment);
-};
-
 exports.getComment = async (req, res, next) => {
     const postId = req.params.postId;
     const comments = await Comments.findAll({ where: { postId: postId } });
     res.json(comments);
+};
+
+exports.createComment = async (req, res, next) => {
+    const comment = req.body;
+    await Comments.create(comment);
+    res.json(comment);
 };
 
 // exports.getAllPosts = async (req, res, next) => {

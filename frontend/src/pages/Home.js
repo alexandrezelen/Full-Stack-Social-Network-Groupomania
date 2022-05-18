@@ -16,7 +16,7 @@ function Home() {
     return (
         <div>{post.map((value, key) => {
             return (
-                <div className="post" onClick={()=>{history(`/post/${value.id}`)}}>
+                <div key={key}className="post" onClick={()=>{history(`/post/${value.id}`)}}>
                     <div className="title"> {value.title} </div>
                     <div className="text">{value.text}</div>
                     <div className="userId">{value.userId}</div>

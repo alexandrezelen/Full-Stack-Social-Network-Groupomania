@@ -47,5 +47,8 @@ db.user = require('./User.js')(sequelize, Sequelize);
 db.post = require('./Post.js')(sequelize, Sequelize);
 db.comment = require('./Comment.js')(sequelize, Sequelize);
 
+db.post.hasMany(db.comment, { onDelete: "CASCADE" });
+
+db.comment.belongsTo(db.post, { onDelete: "CASCADE" });
 
 module.exports = db;
