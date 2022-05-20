@@ -38,17 +38,16 @@ module.exports = (sequelize, Datatypes) => {
             type: Datatypes.STRING(150),
             allowNull: false,
             require: true,
-            // validate: {
-            //     // isLowercase: true,        // checks for lowercase
-            //     // isUppercase: true,        // checks for uppercase
-            //     // min: 8,                  // only allow values >= 8
-            //     // isAlphanumeric: true,     // will only allow alphanumeric characters, so "_abc" will fail
-            //     // notEmpty: true,           // don't allow empty strings
-            // }
         },
-        
+
     },
         { timestamps: false });
+
+    // User.associate = (models) => {
+    //     User.hasMany(models.Posts, {
+    //         onDelete: "cascade"
+    //     });
+    // };
 
     return User;
 };

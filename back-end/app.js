@@ -4,11 +4,11 @@ const app = express();
 const dotenv = require('dotenv').config();
 const path = require('path');
 const db = require('./models');
-const cors = require('cors')
+const cors = require('cors');
 
 const postRoutes = require('./routes/post');
 const commentRoutes = require('./routes/comment');
-//const userRoutes = require('./routes/user');
+const userRoutes = require('./routes/user');
 
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -18,15 +18,15 @@ app.use((req, res, next) => {
 });
 
 app.use(express.json());
-app.use(cors())
+app.use(cors());
 
 app.use('/post', postRoutes);
 app.use('/comment', commentRoutes);
-//app.use('/user', userRoutes);
+app.use('/user', userRoutes);
 
 // to auto reset : { force: true }
 // to modify only the specified { alter: true }
-db.sequelize.sync({ force: true })
+db.sequelize.sync({ alter: true })
     .then(server)
     .catch(err => console.log({ err }));
 
