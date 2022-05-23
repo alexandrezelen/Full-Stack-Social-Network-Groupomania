@@ -19,7 +19,10 @@ function Registration() {
     const onSubmit = (data) => {
         axios.post("http://localhost:3001/user/signup", data).then(() => {
             console.log(data);
-        });
+        })
+        .catch(error => {
+            console.log(error.response);
+        })
     };
 
     return (

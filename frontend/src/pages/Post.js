@@ -23,11 +23,21 @@ function Post() {
             .post("http://localhost:3001/comment", {
                 text: newComment,
                 PostId: id,
-            })
+            },
+                {
+                    headers: {
+                        accessToken: sessionStorage.getItem("accessToken")
+                    }
+                }
+            )
             .then((response) => {
-                const commentToAdd = { text: newComment };
-                setComments([...comments, commentToAdd]);
-                setNewComment("");
+                if (response.data.error) {
+                    console.log(response.data.error);
+                } else {
+                    const commentToAdd = { text: newComment };
+                    setComments([...comments, commentToAdd]);
+                    setNewComment("");
+                }
             });
     };
 
