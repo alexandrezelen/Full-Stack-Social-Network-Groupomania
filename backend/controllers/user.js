@@ -18,17 +18,11 @@ exports.signup = (req, res, next) => {
                 password: hash,
                 firstname: req.body.firstname,
                 lastname: req.body.lastname
-            })
+                })
                 .then(() => res.status(201).json({ message: 'Utilisateur créé' }))
-                .catch(error => res.status(400).json({ error }));
+                .catch(error => res.status(400).json({ error, message: 'Impossibilité de créer le compte' }));
         })
-        .catch(error => res.status(500).json({ error }));
-};
-
-exports.getMe = (req, res, next) => {
-    // reprendre la méthode de getProfile
-    const user = { id: req.token, role: req.role };
-    res.status(200).json({ user });
+        .catch(error => res.status(500).json({ error, message: 'Erreur de serveur' }));
 };
 
 exports.login = async (req, res, next) => {
@@ -44,6 +38,12 @@ exports.login = async (req, res, next) => {
         );
         res.json(accessToken);
     });
+};
+
+exports.getMe = (req, res, next) => {
+   User.findOne({ where: { id: req.userId }})
+   .then((user) => res.status(200).json({id: user.id, isAdmin: user.isAdmin}))
+   .catch(err => res.status(404).json(err))
 };
 
 exports.getProfile = (req, res, next) => {
@@ -63,25 +63,33 @@ exports.getProfile = (req, res, next) => {
 };
 
 exports.updateUser = (req, res, next) => {
-    // même méthode utilisée pour modif image, profil, mot de passe
-    const id = req.params.id;
-    User.findOne({ where: { id: id } })
+    const userObject = req.file ? { ...req.body.user, profilePicture: `${req.get('host')}/images/${req.file.filename}` } : { ...req.body };
+    User.findOne({ where: { id: req.params.id } })
         .then((user) => {
-            if (user.dataValues.id != req.token || req.role != 1) { return res.status(400).json({ message: "L'utilisateur n'a pas les droits requis" }); }
-            User.update(req.body, { where: { id: id } })
-                .then(() => res.status(201).json({ message: "Utilisateur modifié" }))
-                .catch(err => res.status(403).json({ error: err }));
+            if (user.id !== req.userId && req.isAdmin !== true) { return res.status(401).json({ error }) }
+            User.update({ ...userObject }, { where: { id: req.params.id } })
+                .then(() => {
+                    User.findOne({ where: { id: req.params.id } })
+                        .then((updatedUser) => {
+                            const updatedProfile = {
+                                firstname: updatedUser.firstname,
+                                lastname: updatedUser.lastname,
+                                email: updatedUser.email,
+                                department: updatedUser.department,
+                                profilePicture: updatedUser.profilePicture
+                            };
+                            res.status(200).json({ message: "Profil mis à jour", updatedProfile });
+                        })
+                        .catch(err => res.status(400).json(err));
+                })
+                .catch(err => res.status(405).json({ err }));
         })
-        .catch((err) => res.status(400).json(err));
+        .catch(err => res.status(418).json({ err }));
 };
 
 exports.deleteUser = (req, res, next) => {
-    User.findOne({ where: { id: req.params.id } })
-        .then((user) => {
-            if (req.params.id !== req.userId) { return res.signup.status(400).json({ message: "Vous n'avez pas les privilèges requis." }); }
-            User.destroy({ where: { id: req.params.id } })
-                .then(() => res.status(200).json({ message: "User deleted" }))
-                .catch(err => res.status(400).json(err));
-        })
-        .catch(err => res.status(400).json(err));
+    if (req.userId != req.params.id && req.isAdmin !== true) { return res.status(400).json({ message: "Non-autorisé" }); }
+    User.destroy({ where: { id: req.params.id } })
+        .then(() => res.status(200).json({ message: 'Profil supprimé' }))
+        .catch(error => res.status(403).json({ error }));
 };

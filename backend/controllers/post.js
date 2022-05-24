@@ -4,6 +4,12 @@ const db = require('../models');
 const Post = db.post;
 const fs = require('fs');
 
+exports.createPost = async (req, res, next) => {
+    const post = req.body;
+    await Post.create(post);
+    res.json(post);
+};
+
 // exports.createPost = async (req, res) => {
 //     try {
 //         await Post.create(req.body);
@@ -23,15 +29,9 @@ const fs = require('fs');
 //         profilePicture: media
 //     });
 //     body.save()
-//         .then(() => res.status(201).json({ message: 'Post enregistré !' }))
+//         .then(() => res.status(201).json({ message: 'Post enregistré' }))
 //         .catch(error => res.status(400).json({ error }));
 // };
-
-exports.createPost = async (req, res, next) => {
-    const post = req.body;
-    await Posts.create(post);
-    res.json(post);
-};
 
 // exports.createPost = async (req, res, next) => {
 //     const post = req.body;

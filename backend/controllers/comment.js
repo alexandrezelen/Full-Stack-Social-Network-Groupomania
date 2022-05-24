@@ -33,25 +33,9 @@ exports.getAllComments = async (req, res) => {
 };
 
 exports.updateComment = (req, res, next) => {
-    // Comment.findOne({ where: { id: req.params.id} })
-    // .then((comment) => {
-    //   if(req.token === comment.dataValues.userId || req.role === 2){
-    //     Comment.destroy({ where: { id: req.params.id } })
-    //     .then(() => res.status(200).json({ message: "Le commentaire à été supprimé avec succès."}))
-    //     .catch(err => res.status(400).json(err))
-    //   } else { res.status(400).json({ message:"Vous ne disposez pas des privilèges requis pour modifier ce commentaire." })}
-    // })
-    // .catch(err => res.status(400).json(err))
+
   }
 
 exports.deleteComment = (req, res, next) => {
-    Comment.findOne({ where: { id: req.params.id} })
-    .then((comment) => {
-      if(req.token === comment.dataValues.userId || req.role === 2){
-        Comment.destroy({ where: { id: req.params.id } })
-        .then(() => res.status(200).json({ message: "Le commentaire à été supprimé avec succès."}))
-        .catch(err => res.status(400).json(err))
-      } else { res.status(400).json({ message:"Vous ne disposez pas des privilèges requis pour modifier ce commentaire." })}
-    })
-    .catch(err => res.status(400).json(err))
+   
   }

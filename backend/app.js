@@ -33,7 +33,7 @@ app.use('/user', userRoutes);
 
 // to auto reset : { force: true }
 // to modify only the specified { alter: true }
-db.sequelize.sync({ force: true })
+db.sequelize.sync({ alter: true })
     .then(server)
     .catch(err => console.log({ err }));
 
