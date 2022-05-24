@@ -15,16 +15,22 @@ const fs = require('fs');
 //     }
 // };
 
-exports.createPost = (req, res, next) => {
-    const bodyObject = req.body;
-    const media = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`;
-    const body = new Body({
-        ...bodyObject,
-        profilePicture: media
-    });
-    body.save()
-        .then(() => res.status(201).json({ message: 'Post enregistré !' }))
-        .catch(error => res.status(400).json({ error }));
+// exports.createPost = (req, res, next) => {
+//     const bodyObject = req.body;
+//     const media = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`;
+//     const body = new Body({
+//         ...bodyObject,
+//         profilePicture: media
+//     });
+//     body.save()
+//         .then(() => res.status(201).json({ message: 'Post enregistré !' }))
+//         .catch(error => res.status(400).json({ error }));
+// };
+
+exports.createPost = async (req, res, next) => {
+    const post = req.body;
+    await Posts.create(post);
+    res.json(post);
 };
 
 // exports.createPost = async (req, res, next) => {

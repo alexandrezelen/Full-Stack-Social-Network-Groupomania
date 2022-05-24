@@ -25,7 +25,8 @@ exports.signup = (req, res, next) => {
         .catch(error => res.status(500).json({ error }));
 };
 
-exports.checkUser = (req, res, next) => {
+exports.getMe = (req, res, next) => {
+    // reprendre la méthode de getProfile
     const user = { id: req.token, role: req.role };
     res.status(200).json({ user });
 };
@@ -42,21 +43,27 @@ exports.login = async (req, res, next) => {
             { expiresIn: '24h' }
         );
         res.json(accessToken);
-        //return res.status(200).json({ token: jwt.sign({ userId: user.id }, process.env.SECRET_TOKEN, { expiresIn: '24h' }) });
     });
 };
 
-
 exports.getProfile = (req, res, next) => {
-    User.findOne({ where: { id: req.params.id } })
-        .then((user) => {
-            let profile = user.dataValues;
-            return res.status(200).json({ profile: profile, userId: req.userId });
+    User.findOne({
+        attributes: ["firstname", "lastname", "email"],
+        where: { id: req.params.id }
+    })
+        .then(user => res.status(200).json({
+            user
+        }))
+        .catch(function (err) {
+            res.status(500).json({
+                err, message: 'Le serveur ne récupère pas le profil'
+            });
         })
         .catch(err => res.status(418).json(err));
 };
 
 exports.updateUser = (req, res, next) => {
+    // même méthode utilisée pour modif image, profil, mot de passe
     const id = req.params.id;
     User.findOne({ where: { id: id } })
         .then((user) => {
@@ -66,23 +73,6 @@ exports.updateUser = (req, res, next) => {
                 .catch(err => res.status(403).json({ error: err }));
         })
         .catch((err) => res.status(400).json(err));
-};
-
-exports.updatePassword = async (req, res, next) => {
-    const { oldPassword, newPassword } = req.body;
-    const user = await User.findOne({ where: { email: req.user.email } });
-
-    bcrypt.compare(oldPassword, user.password).then(async (match) => {
-        if (!match) res.json({ error: "Mauvais mot de passe" });
-    });
-
-    bcrypt.hash(newPassword, 10).then((hash) => {
-        User.update(
-            { password: hash },
-            { where: { email: req.user.email } }
-        );
-        res.json('Mail modifié');
-    });
 };
 
 exports.deleteUser = (req, res, next) => {

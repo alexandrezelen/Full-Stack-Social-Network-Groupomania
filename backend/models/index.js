@@ -52,15 +52,11 @@ db.post = require('./Post.js')(sequelize, Sequelize);
 // Commentaire
 db.comment = require('./Comment.js')(sequelize, Sequelize);
 
-// Rôle
-db.role = require("./Role.js")(sequelize, Sequelize);
-
 // -- Associations -- //
 
 // Utilisateur
 db.user.hasMany(db.post);
 db.user.hasMany(db.comment);
-db.user.hasOne(db.role);
 
 // Post
 db.post.hasMany(db.comment, { onDelete: "CASCADE" });
@@ -69,8 +65,5 @@ db.post.belongsTo(db.user);
 // Commentaire
 db.comment.belongsTo(db.post, { onDelete: "CASCADE" });
 db.comment.belongsTo(db.user);
-
-// Rôle
-db.role.belongsTo(db.user);
 
 module.exports = db;

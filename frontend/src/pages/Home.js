@@ -4,17 +4,17 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom'
 
 function Home() {
-    const [post, setPost] = useState([]);
+    const [listOfPosts, setListOfPosts] = useState([]);
     let history = useNavigate()
 
     useEffect(() => {
         axios.get("http://localhost:3001/post").then((response) => {
-            setPost(response.data);
+            setListOfPosts(response.data);
         });
     }, []);
 
     return (
-        <div>{post.map((value, key) => {
+        <div>{listOfPosts.map((value, key) => {
             return (
                 <div key={key}className="post" onClick={()=>{history(`/post/${value.id}`)}}>
                     <div className="title"> {value.title} </div>
