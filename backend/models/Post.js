@@ -13,11 +13,11 @@ module.exports = (sequelize, Datatypes) => {
         },
         text: {
             type: Datatypes.TEXT,
-            allowNull: false,
+            allowNull: true,
         },
         postImage: {
-            type: Datatypes.STRING,
-            allowNull: false,
+            type: Datatypes.STRING(255),
+            allowNull: true,
         },
     },
         { timestamps: true });

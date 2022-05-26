@@ -2,24 +2,24 @@ const express = require("express");
 const router = express.Router();
 const db = require('../models');
 const Post = db.post;
+const User = db.user;
+const Comment = db.comment;
 const fs = require('fs');
 
-exports.createPost = async (req, res, next) => {
-    const post = req.body;
-    await Post.create(post);
-    res.json(post);
-};
-
-// exports.createPost = async (req, res) => {
-//     try {
-//         await Post.create(req.body);
-//         res.json({
-//             "message": "Post créé"
-//         });
-//     } catch (err) {
-//         console.log(err);
-//     }
+// exports.createPost = async (req, res, next) => {
+//     const post = req.body;
+//     await Post.create(post);
+//     res.json(post);
 // };
+
+exports.createPost = async (req, res) => {
+    console.log(req.body);
+    try {
+        await Post.create(req.body);
+        res.status(200).json({ "message": "Post créé" });
+    }
+    catch (err) { console.log(err); res.status(400).json(err); }
+};
 
 // exports.createPost = (req, res, next) => {
 //     const bodyObject = req.body;
@@ -48,15 +48,10 @@ exports.createPost = async (req, res, next) => {
 // };
 
 exports.getAllPosts = (req, res) => {
-    Post.findAll({
-        order: [['id', 'DESC']]
-    }).then(posts => {
-        return res.status(200).json({
-            posts
-        });
-    }).catch(err => {
-        return res.status(400).json({ err });
-    });
+    // { order: [['id', 'DESC']]}
+    Post.findAll({ include: [{ model: User }, { model: Comment, include: { model: User } }] })
+        .then(posts => { return res.status(200).json(posts); })
+        .catch(err => { return res.status(400).json(err); });
 };
 
 // exports.getAllPosts = async (req, res, next) => {
@@ -72,11 +67,14 @@ exports.getAllPosts = (req, res) => {
 //         });
 // };
 
-exports.getPostById = async (req, res, next) => {
+exports.getOnePost = (req, res, next) => {
     const id = req.params.id;
-    const post = await Post.findByPk(id);
-    res.json(post);
+    Post.findOne({ include: [{ model: User }, { model: Comment, include: { model: User } }] })
+        ({ where: { id: id } })
+        .then(post => { return res.status(200).json(post); })
+        .catch(err => { return res.status(400).json(err); });
 };
+
 
 exports.updatePost = (req, res) => {
     const body = req.body;

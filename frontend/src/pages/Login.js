@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
+import axios from '../api/axios';
 import { useNavigate } from 'react-router-dom';
 
 function Login() {
@@ -10,14 +10,18 @@ function Login() {
 
     const login = () => {
         const data = { email: email, password: password };
-        axios.post("http://localhost:3001/user/login", data).then((response) => {
-            if (response.data.error) {
-                alert(response.data.error)
-            } else {
-                localStorage.setItem("accessToken", response.data);
+        axios.post("user/login", data).then((response) => {
+                console.log(response.data)
+                const token = JSON.stringify(response.data);
+                localStorage.setItem("accessToken", token);
+                // setAuthState({
+                //     email: response.data.email,
+                //     id: response.data.id,
+                //     status: true
+                // });
                 history("/");
-            }
-        });
+        })
+        .catch(err => alert(err))
     };
     return (
         <div className="loginContainer">
@@ -31,9 +35,14 @@ function Login() {
             <label>Mot de passe</label>
             <input
                 type="password"
+                name="password"
                 onChange={(event) => {
                     setPassword(event.target.value);
                 }}
+                minLength="8"
+                maxLength="50"
+                placeholder="Entrez votre mot de passe"
+                required
             />
 
             <button onClick={login}>Se connecter</button>

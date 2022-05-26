@@ -8,6 +8,7 @@ const passwordSchema = require('../middlewares/password-validator.js');
 const { sign } = require('jsonwebtoken');
 
 exports.signup = (req, res, next) => {
+    console.log(req.body)
     let passwordIsOk = passwordSchema.validate(req.body.password);
     if (!passwordIsOk) { return res.status(400).json({ error: "Le mot de passe doit être contenu entre 8 et 50 caractères" }); };
 
@@ -18,7 +19,7 @@ exports.signup = (req, res, next) => {
                 password: hash,
                 firstname: req.body.firstname,
                 lastname: req.body.lastname
-                })
+            })
                 .then(() => res.status(201).json({ message: 'Utilisateur créé' }))
                 .catch(error => res.status(400).json({ error, message: 'Impossibilité de créer le compte' }));
         })
@@ -41,9 +42,9 @@ exports.login = async (req, res, next) => {
 };
 
 exports.getMe = (req, res, next) => {
-   User.findOne({ where: { id: req.userId }})
-   .then((user) => res.status(200).json({id: user.id, isAdmin: user.isAdmin}))
-   .catch(err => res.status(404).json(err))
+    User.findOne({ where: { id: req.userId } })
+        .then((user) => res.status(200).json({ id: user.id, isAdmin: user.isAdmin }))
+        .catch(err => res.status(404).json(err));
 };
 
 exports.getProfile = (req, res, next) => {
@@ -63,32 +64,47 @@ exports.getProfile = (req, res, next) => {
 };
 
 exports.updateUser = (req, res, next) => {
-    const userObject = req.file ? { ...req.body.user, profilePicture: `${req.get('host')}/images/${req.file.filename}` } : { ...req.body };
+    const userObject = req.file ? {
+        ...req.body.user,
+        profilePicture: `${req.get('host')}/images/${req.file.filename}`
+    } : {
+        ...req.body
+    };
     User.findOne({ where: { id: req.params.id } })
         .then((user) => {
-            if (user.id !== req.userId && req.isAdmin !== true) { return res.status(401).json({ error }) }
+            if (user.id !== req.userId && req.isAdmin !== true) { return res.status(401).json({ error }); }
             User.update({ ...userObject }, { where: { id: req.params.id } })
-                .then(() => {
-                    User.findOne({ where: { id: req.params.id } })
-                        .then((updatedUser) => {
-                            const updatedProfile = {
-                                firstname: updatedUser.firstname,
-                                lastname: updatedUser.lastname,
-                                email: updatedUser.email,
-                                department: updatedUser.department,
-                                profilePicture: updatedUser.profilePicture
-                            };
-                            res.status(200).json({ message: "Profil mis à jour", updatedProfile });
-                        })
-                        .catch(err => res.status(400).json(err));
-                })
-                .catch(err => res.status(405).json({ err }));
+                .then((user) => res.status(201).json({
+                    user: {
+                        firstname: user.firstname,
+                        lastname: user.lastname,
+                        email: user.email,
+                        department: user.department,
+                        profilePicture: userUpdated.profilePicture
+                    }
+                }))
+                .catch(error => res.status(405).json({ error }));
+            // .then(() => {
+            //     User.findOne({ where: { id: req.params.id } })
+            //         .then((updatedUser) => {
+            //             const updatedProfile = {
+            //                 firstname: updatedUser.firstname,
+            //                 lastname: updatedUser.lastname,
+            //                 email: updatedUser.email,
+            //                 department: updatedUser.department,
+            //                 profilePicture: updatedUser.profilePicture
+            //             };
+            //             res.status(200).jsonres.status(201).json
+            //         })
+            //         .catch(err => res.status(400).json(err));
+            // })
+            // .catch(err => res.status(405).json({ err }));
         })
         .catch(err => res.status(418).json({ err }));
 };
 
 exports.deleteUser = (req, res, next) => {
-    if (req.userId != req.params.id && req.isAdmin !== true) { return res.status(400).json({ message: "Non-autorisé" }); }
+    if (req.userId != req.params.id && req.isAdmin !== true) { return res.status(400).json({ message: "Non autorisé" }); }
     User.destroy({ where: { id: req.params.id } })
         .then(() => res.status(200).json({ message: 'Profil supprimé' }))
         .catch(error => res.status(403).json({ error }));
