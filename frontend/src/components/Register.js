@@ -3,9 +3,10 @@ import { useRef, useState, useEffect } from "react";
 import { faCheck, faTimes, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from '../api/axios';
+import { Link } from 'react-router-dom'
 
-const FIRSTNAME_REGEX = /^(?=.*[a-z])(?=.*[A-Z])/;
-const LASTNAME_REGEX = /^(?=.*[a-z])(?=.*[A-Z])/;
+const FIRSTNAME_REGEX = /^(?=.*[a-z])/;
+const LASTNAME_REGEX = /^(?=.*[a-z])/;
 const EMAIL_REGEX = /^(?=.*[a-z])(?=.*[!@#$%]).{8,50}$/;
 const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,150}$/;
 const REGISTER_URL = 'user/signup';
@@ -86,8 +87,6 @@ const Register = () => {
         try {
             const userForm = { email: email, password: password, firstname: firstname, lastname: lastname};
             const response = await axios.post(REGISTER_URL, { ...userForm });
-            console.log(await response?.data);
-            console.log(await response?.accessToken);
             console.log(await JSON.stringify(response));
             setSuccess(true);
             //clear state and controlled inputs
@@ -99,7 +98,7 @@ const Register = () => {
             setMatchPassword('');
         } catch (err) {
             if (!err?.response) {
-                setErrMsg('No Server Response');
+                setErrMsg('Pas de réponse du serveur');
             } else if (err.response?.status === 409) {
                 setErrMsg('Mail déjà pris');
             } else {
@@ -132,7 +131,7 @@ const Register = () => {
                             type="text"
                             id="firstname"
                             ref={firstnameRef}
-                            autoComplete="on"
+                            autoComplete="off"
                             onChange={(e) => setFirstname(e.target.value)}
                             value={firstname}
                             required
@@ -143,9 +142,7 @@ const Register = () => {
                         />
                         <p id="uidnote" className={firstnameFocus && firstname && !validFirstname ? "instructions" : "offscreen"}>
                             <FontAwesomeIcon icon={faInfoCircle} />
-                            Entre 4 et 24 caractères.<br />
-                            Must begin with a letter.<br />
-                            Letters, numbers, underscores, hyphens allowed.
+                            Seules les lettres en minuscule sont acceptées<br />
                         </p>
 
                         <label htmlFor="lastname">
@@ -157,7 +154,7 @@ const Register = () => {
                             type="text"
                             id="lastname"
                             ref={lastnameRef}
-                            autoComplete="on"
+                            autoComplete="off"
                             onChange={(e) => setLastname(e.target.value)}
                             value={lastname}
                             required
@@ -168,9 +165,7 @@ const Register = () => {
                         />
                         <p id="uidnote" className={lastnameFocus && lastname && !validLastname ? "instructions" : "offscreen"}>
                             <FontAwesomeIcon icon={faInfoCircle} />
-                            Entre 4 et 24 caractères.<br />
-                            Must begin with a letter.<br />
-                            Letters, numbers, underscores, hyphens allowed.
+                            Seules les lettres en minuscule sont acceptées<br />
                         </p>
 
                         <label htmlFor="email">
@@ -182,7 +177,7 @@ const Register = () => {
                             type="text"
                             id="email"
                             ref={emailRef}
-                            autoComplete="on"
+                            autoComplete="off"
                             onChange={(e) => setEmail(e.target.value)}
                             value={email}
                             required
@@ -247,9 +242,7 @@ const Register = () => {
                     <p>
                         Déjà enregistré ?<br />
                         <span className="line">
-                            {/*put router link here*/}
-                            <a href="#">Se connecter</a>
-                        </span>
+                        <Link to="/">Sign In</Link>                        </span>
                     </p>
                 </section>
             )}

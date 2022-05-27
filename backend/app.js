@@ -23,13 +23,16 @@ app.use((req, res, next) => {
 // -- Middlewares -- //
 app.use(express.json());
 app.use(cors());
-app.use(helmet());
+app.use(helmet({
+    crossOriginEmbedderPolicy: false,
+    crossOriginResourcePolicy: false,
+}));
 app.use('/images', express.static(path.join(__dirname, 'images')));
 
 // -- Routes -- //
+app.use('/user', userRoutes);
 app.use('/post', postRoutes);
 app.use('/comment', commentRoutes);
-app.use('/user', userRoutes);
 
 // to auto reset : { force: true }
 // to modify only the specified { alter: true }

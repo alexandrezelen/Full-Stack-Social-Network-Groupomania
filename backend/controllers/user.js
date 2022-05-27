@@ -33,7 +33,7 @@ exports.login = async (req, res, next) => {
     bcrypt.compare(password, user.password).then((match) => {
         if (!match) { return res.status(401).json({ error: "Email et/ou mot de passe incorrect(s)" }); }
         const accessToken = sign(
-            { userId: user.id },
+            { UserId: user.id },
             process.env.SECRET_TOKEN,
             { expiresIn: '24h' }
         );
@@ -42,7 +42,7 @@ exports.login = async (req, res, next) => {
 };
 
 exports.getMe = (req, res, next) => {
-    User.findOne({ where: { id: req.userId } })
+    User.findOne({ where: { id: req.UserId } })
         .then((user) => res.status(200).json({ id: user.id, isAdmin: user.isAdmin }))
         .catch(err => res.status(404).json(err));
 };
@@ -72,7 +72,7 @@ exports.updateUser = (req, res, next) => {
     };
     User.findOne({ where: { id: req.params.id } })
         .then((user) => {
-            if (user.id !== req.userId && req.isAdmin !== true) { return res.status(401).json({ error }); }
+            if (user.id !== req.UserId && req.isAdmin !== true) { return res.status(401).json({ error }); }
             User.update({ ...userObject }, { where: { id: req.params.id } })
                 .then((user) => res.status(201).json({
                     user: {
@@ -104,7 +104,7 @@ exports.updateUser = (req, res, next) => {
 };
 
 exports.deleteUser = (req, res, next) => {
-    if (req.userId != req.params.id && req.isAdmin !== true) { return res.status(400).json({ message: "Non autorisé" }); }
+    if (req.UserId != req.params.id && req.isAdmin !== true) { return res.status(400).json({ message: "Non autorisé" }); }
     User.destroy({ where: { id: req.params.id } })
         .then(() => res.status(200).json({ message: 'Profil supprimé' }))
         .catch(error => res.status(403).json({ error }));

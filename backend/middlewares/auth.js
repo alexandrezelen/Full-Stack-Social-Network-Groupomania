@@ -7,13 +7,13 @@ module.exports = (req, res, next) => {
     try {
         const token = req.header("accessToken");
         const decodedToken = jwt.verify(token, process.env.SECRET_TOKEN);
-        const userId = decodedToken.userId;
-        User.findOne({ where : { id : userId}})
+        const UserId = decodedToken.UserId;
+        User.findOne({ where : { id : UserId}})
         .then((profile)=> {
-           if (req.body.userId && req.body.userId !== userId) {
+           if (req.body.UserId && req.body.UserId !== UserId) {
             throw 'User ID non valable !';
             } else {
-                req.userId = userId;
+                req.UserId = UserId;
                 req.isAdmin = profile.dataValues.isAdmin;
                 next();
         } })

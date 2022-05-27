@@ -1,5 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Nunito&display=swap");
 
+
+
 * {
   margin: 0;
   padding: 0;
@@ -48,6 +50,13 @@ form {
 a,
 a:visited {
   color: #fff;
+}
+
+img {
+  height: 70%;
+  width: 70%;
+  border-radius: 10px;
+  color: red;
 }
 
 input[type="text"],
