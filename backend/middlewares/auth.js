@@ -5,9 +5,10 @@ const User = db.user;
 
 module.exports = (req, res, next) => {
     try {
-        const token = req.header("accessToken");
+        const token = req.headers.authorizations;
         const decodedToken = jwt.verify(token, process.env.SECRET_TOKEN);
         const UserId = decodedToken.UserId;
+        req.UserId = UserId;
         User.findOne({ where : { id : UserId}})
         .then((profile)=> {
            if (req.body.UserId && req.body.UserId !== UserId) {

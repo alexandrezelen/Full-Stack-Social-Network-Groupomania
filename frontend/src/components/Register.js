@@ -3,7 +3,7 @@ import { useRef, useState, useEffect } from "react";
 import { faCheck, faTimes, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from '../api/axios';
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
 
 const FIRSTNAME_REGEX = /^(?=.*[a-z])/;
 const LASTNAME_REGEX = /^(?=.*[a-z])/;
@@ -85,12 +85,10 @@ const Register = () => {
             return;
         }
         try {
-            const userForm = { email: email, password: password, firstname: firstname, lastname: lastname};
+            const userForm = { email: email, password: password, firstname: firstname, lastname: lastname };
             const response = await axios.post(REGISTER_URL, { ...userForm });
             console.log(await JSON.stringify(response));
             setSuccess(true);
-            //clear state and controlled inputs
-            //need value attrib on inputs for this
             setFirstname('');
             setLastname('');
             setEmail('');
@@ -114,7 +112,7 @@ const Register = () => {
                 <section>
                     <h1>Success!</h1>
                     <p>
-                        <a href="#">Se connecter</a>
+                        <Link to="/login">Se connecter</Link>
                     </p>
                 </section>
             ) : (
@@ -212,7 +210,6 @@ const Register = () => {
                             <FontAwesomeIcon icon={faInfoCircle} />
                             Le mot de passe doit contenir 8 caractères minimum<br />
                             Il doit contenir au moins une majuscule, une minuscule et un chiffre<br />
-                            {/* Allowed special characters: <span aria-label="exclamation mark">!</span> <span aria-label="at symbol">@</span> <span aria-label="hashtag">#</span> <span aria-label="dollar sign">$</span> <span aria-label="percent">%</span> */}
                         </p>
 
 
@@ -242,7 +239,8 @@ const Register = () => {
                     <p>
                         Déjà enregistré ?<br />
                         <span className="line">
-                        <Link to="/">Sign In</Link>                        </span>
+                            <Link to="/login">Se connecter</Link>
+                        </span>
                     </p>
                 </section>
             )}
