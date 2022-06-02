@@ -56,6 +56,7 @@ const Login = () => {
                     id="email"
                     ref={emailRef}
                     autoComplete="off"
+                    placeholder='...'
                     onChange={(e) => setEmail(e.target.value)}
                     value={email}
                     required
@@ -65,6 +66,7 @@ const Login = () => {
                 <input
                     type="password"
                     id="password"
+                    placeholder='...'
                     onChange={(e) => setPassword(e.target.value)}
                     value={password}
                     required

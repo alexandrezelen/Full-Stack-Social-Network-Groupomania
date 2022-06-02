@@ -110,7 +110,7 @@ const Register = () => {
         <>
             {success ? (
                 <section>
-                    <h1>Success!</h1>
+                    <h1>Ça a fonctionné !</h1>
                     <p>
                         <Link to="/login">Se connecter</Link>
                     </p>
@@ -130,6 +130,7 @@ const Register = () => {
                             id="firstname"
                             ref={firstnameRef}
                             autoComplete="off"
+                            placeholder="..."
                             onChange={(e) => setFirstname(e.target.value)}
                             value={firstname}
                             required
@@ -153,6 +154,7 @@ const Register = () => {
                             id="lastname"
                             ref={lastnameRef}
                             autoComplete="off"
+                            placeholder="..."
                             onChange={(e) => setLastname(e.target.value)}
                             value={lastname}
                             required
@@ -176,6 +178,7 @@ const Register = () => {
                             id="email"
                             ref={emailRef}
                             autoComplete="off"
+                            placeholder="..."
                             onChange={(e) => setEmail(e.target.value)}
                             value={email}
                             required
@@ -198,6 +201,7 @@ const Register = () => {
                         <input
                             type="password"
                             id="password"
+                            placeholder="..."
                             onChange={(e) => setPassword(e.target.value)}
                             value={password}
                             required
@@ -221,6 +225,7 @@ const Register = () => {
                         <input
                             type="password"
                             id="confirm_pwd"
+                            placeholder="..."
                             onChange={(e) => setMatchPassword(e.target.value)}
                             value={matchPassword}
                             required
