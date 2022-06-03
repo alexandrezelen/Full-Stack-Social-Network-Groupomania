@@ -25,7 +25,6 @@ const Login = () => {
         try {
             const userForm = { email: email, password: password };
             const response = await axios.post(tools.memo.LOGIN_URL, { ...userForm });
-            // const token = JSON.stringify(response.data);
             localStorage.setItem("accessToken", JSON.stringify({ token: response.data }));
 
             return tools.redirectToHome();

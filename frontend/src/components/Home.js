@@ -6,9 +6,8 @@ import * as tools from "./Tool"
 
 function Home() {
     const [listOfPosts, setListOfPosts] = useState([]);
-    
     let history = useNavigate();
-
+    
     useEffect(() => {
         // eslint-disable-next-line
         const response = tools.checkUser();

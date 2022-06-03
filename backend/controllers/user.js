@@ -84,14 +84,14 @@ exports.updatePassword = async (req, res) => {
     if (req.UserId != req.params.id && req.isAdmin !== true) { return res.status(400).json({ message: "Non autorisé" }); }
     else {
         const { oldPassword, newPassword } = req.body;
-        const user = await User.findOne({ where: { email: req.body.email } });
+        const user = await User.findOne({ where: { id: req.UserId } });
         bcrypt.compare(oldPassword, user.password).then(async (match) => {
             if (!match) res.json({ error: 'Mauvais mot de passe entré' });
 
             bcrypt.hash(newPassword, 10).then((hash) => {
                 User.update(
                     { password: hash },
-                    { where: { email: req.body.email } }
+                    { where: { id: req.UserId } }
                 );
                 res.json('Mot de passe mis à jour');
             });
@@ -104,7 +104,7 @@ exports.updatePicture = async (req, res) => {
     if (!req.file) { return res.status(400).json({ message: "Il n'y a pas d'image incluse." }); }
     if (req.UserId != req.params.id && req.isAdmin !== true) { return res.status(400).json({ message: "Non autorisé" }); }
 
-    User.findOne({ where: { email: req.body.email } })
+    User.findOne({ where: { id: req.UserId } })
         .then(userModify => {
             const oldUrl = User.profilePicture.split('/images/')[1];
             if (req.file) {

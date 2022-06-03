@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import axios from 'axios';
+import axios from '../api/axios';
 
 function Post() {
     // retrouve l'id du Post
@@ -10,18 +10,18 @@ function Post() {
     const [newComment, setNewComment] = useState("");
 
     useEffect(() => {
-        axios.get(`http://localhost:3001/post/byId/${id}`).then((response) => {
+        axios.get(`/post/${id}`).then((response) => {
             setPostObject(response.data);
         });
 
-        axios.get(`http://localhost:3001/comment/${id}`).then((response) => {
+        axios.get(`/comment/${id}`).then((response) => {
             setComments(response.data);
         });
     }, [id]);
 
     const addComment = () => {
         axios
-            .post("http://localhost:3001/comment", {
+            .post("/comment/", {
                 text: newComment,
                 PostId: id,
             },
@@ -48,6 +48,7 @@ function Post() {
                 <div className="post" id="individual">
                     <div className="title"> {postObject.title} </div>
                     <div className="text">{postObject.text}</div>
+                    <div className="postImage">{postObject.postImage}</div>
                     <div className="userId">{postObject.userId}</div>
                 </div>
             </div>
@@ -61,7 +62,7 @@ function Post() {
                             setNewComment(event.target.value);
                         }}
                     />
-                    <button onClick={addComment}> Ajouter un Commentaire</button>
+                    <button onClick={addComment}>Ajouter un Commentaire</button>
                 </div>
                 <div className='listOfComments'>
                     {comments.map((comment, key) => {

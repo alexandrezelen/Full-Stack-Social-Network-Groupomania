@@ -12,18 +12,15 @@ function CreatePost() {
         title: "",
         text: "",
         postImage: "",
-        userId: "",
-        createdAt: ""
     };
 
     const validationSchema = Yup.object().shape({
         title: Yup.string().required("Champ vide !"),
         text: Yup.string().required("Champ vide !"),
-        userId: Yup.string().min(3).max(15).required(""),
-        createdAt: Yup.date().default(() => new Date()),
     });
 
     const onSubmit = (data) => {
+        console.log(data);
         axios.post("/post/", data).then((response) => {
             history("/");
         });
@@ -35,23 +32,21 @@ function CreatePost() {
                 <Form className="formContainer">
                     <label>Titre :</label>
                     <ErrorMessage name="title" component="span" />
-                    <Field autoComplete="off" id="inputCreatePost" name="title" placeholder="..." />
+                    <Field autoComplete="off" id="inputCreatePost title" name="title" placeholder="..." />
 
                     <label>Texte :</label>
                     <ErrorMessage name="text" component="span" />
-                    <Field autoComplete="off" id="inputCreatePost" name="text" placeholder="..." />
+                    <Field autoComplete="off" id="inputCreatePost text" name="text" placeholder="..." />
 
                     <label>Image :</label>
                     <input
                         type='file'
                         name='postImage'
                         accept='image/*'
-                        onChange={(e) =>
-                            Formik.setFieldValue('postImage', e.currentTarget.files[0])
-                        }
+                        id="postImage"
+                        onChange={async e => { await Formik.setFieldValue("postImage" = e.target.value[0]); }}
                     />
-
-                    < label > Auteur :</label>
+                    <label>Auteur :</label>
                     <ErrorMessage name="userId" component="span" />
                     <Field autoComplete="off" id="inputCreatePost" name="userId" placeholder="" />
 

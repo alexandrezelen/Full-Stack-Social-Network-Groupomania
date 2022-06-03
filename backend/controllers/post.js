@@ -7,7 +7,6 @@ const Comment = db.comment;
 const fs = require('fs');
 
 exports.createPost = async (req, res) => {
-    console.log(req.body);
     try {
         const post = {
             title: req.body.title,
@@ -22,40 +21,47 @@ exports.createPost = async (req, res) => {
 };
 
 exports.getAllPosts = (req, res) => {
-    // noter les attributes
     Post.findAll({ include: [{ model: User }, { model: Comment, include: { model: User } }] })
         .then(posts => { return res.status(200).json(posts); })
         .catch(err => { return res.status(400).json(err); });
 };
 
 exports.getOnePost = (req, res, next) => {
-
-    // noter les attributes
     const id = req.params.id;
     Post.findOne({ include: [{ model: User }, { model: Comment, include: { model: User } }] }, { where: { id: id } })
         .then(post => { return res.status(200).json(post); })
         .catch(err => { return res.status(400).json(err); });
 };
 
-exports.updatePost = (req, res) => {
-    if (req.UserId != req.params.id && req.isAdmin !== true) { return res.status(400).json({ message: "Non autorisé" }); }
+exports.updatePost = async (req, res) => {
+    let imageName = "";
+    await Post.findOne({ where: { id: req.params.id } })
+        .then((post) => {
+            req.postCreatorId = post.UserId;
+            imageName = post.postImage.split('/images/')[1];
+        })
+        .catch(err => res.status(400).json(err));
+    if (req.UserId != req.postCreatorId && req.isAdmin !== true) { return res.status(400).json({ message: "Non autorisé" }); }
     const bodyObject = req.file ? {
         ...req.body,
-        profilePicture: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
+        postImage: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
     } : { ...req.body };
-    console.log({ ...bodyObject });
+    await fs.unlink(`images/${imageName}`, () => { console.log("I should have been deleted"); });
     Post.update({ ...bodyObject }, { where: { id: req.params.id } })
         .then(() => res.status(200).json({ message: 'Post modifié' }))
-        .catch(error => res.status(400).json({ error }));
+        .catch(err => res.status(400).json(err));
 };
 
-exports.deletePost = async (req, res, id=0, imageName="") => {
-    await Post.findOne({where: { id: req.params.id }})
-        .then((post) => { imageName = post.postImage; id = post.UserId })
-        .catch(err => res.status(400).json(err))
-    if (req.UserId != id && req.isAdmin !== true) { return res.status(400).json({ message: "Non autorisé" }) }
-    await fs.unlink(`images/${imageName}`,()=>{})
+exports.deletePost = async (req, res, id = 0, imageName = "") => {
+    await Post.findOne({ where: { id: req.params.id } })
+        .then((post) => {
+            req.postCreatorId = post.UserId;
+            imageName = post.postImage.split('/images/')[1];
+        })
+        .catch(err => res.status(400).json(err));
+    if (req.UserId != req.postCreatorId && req.isAdmin !== true) { return res.status(400).json({ message: "Non autorisé" }); }
+    await fs.unlink(`images/${imageName}`, () => { });
     Post.destroy({ where: { id: req.params.id } })
         .then(() => res.status(200).json({ message: "Le post a été supprimé" }))
-        .catch(err => res.status(400).json({ err }));  
+        .catch(err => res.status(400).json({ err }));
 };
