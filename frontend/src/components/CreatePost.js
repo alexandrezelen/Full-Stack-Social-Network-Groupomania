@@ -21,7 +21,12 @@ function CreatePost() {
 
     const onSubmit = (data) => {
         console.log(data);
-        axios.post("/post/", data).then((response) => {
+        axios.post("/post/", data, {
+            headers: {
+                'Authorizations': localStorage.getItem('accessToken')
+            }
+        }
+        ).then((response) => {
             history("/");
         });
     };
@@ -44,7 +49,7 @@ function CreatePost() {
                         name='postImage'
                         accept='image/*'
                         id="postImage"
-                        onChange={async e => { await Formik.setFieldValue("postImage" = e.target.value[0]); }}
+                    //onChange={async e => { await Formik.setFieldValue("postImage" = e.target.value[0]); }}
                     />
                     <label>Auteur :</label>
                     <ErrorMessage name="userId" component="span" />

@@ -2,17 +2,20 @@ import React from 'react';
 import axios from '../api/axios';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import * as tools from "./Tool"
+import * as tools from "./Tool";
 
 function Home() {
     const [listOfPosts, setListOfPosts] = useState([]);
     let history = useNavigate();
-    
     useEffect(() => {
         // eslint-disable-next-line
         const response = tools.checkUser();
 
-        axios.get("/post/")
+        axios.get("/post/", {
+            headers: {
+                'Authorizations': localStorage.getItem('accessToken')
+            }
+        })
             .then((response) => {
                 console.log(response);
                 setListOfPosts(response.data);

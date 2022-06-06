@@ -75,7 +75,6 @@ const Register = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        // if button enabled with JS hack
         const v1 = FIRSTNAME_REGEX.test(firstname);
         const v2 = LASTNAME_REGEX.test(lastname);
         const v3 = EMAIL_REGEX.test(email);

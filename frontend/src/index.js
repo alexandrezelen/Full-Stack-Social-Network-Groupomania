@@ -6,16 +6,18 @@ import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
-    <BrowserRouter>
-      <div className="navbar">
-        <Link to="/">Fil d'actualité</Link>
-        <Link to="/profile">Profil</Link>
-        <Link to="/createpost">Créer un Post</Link>
-      </div>
-      <Routes>
-        <Route path="/*" element={<App />} />
-      </Routes>
-    </BrowserRouter>
-  </React.StrictMode>
+  // <React.StrictMode>
+  <BrowserRouter>
+    <div className="navbar">
+      <Link to="/">Fil d'actualité</Link>
+      <Link to="/profile">Profil</Link>
+      <Link to="/createpost">Créer un Post</Link>
+      <Link to="/login">Se connecter</Link>
+      <Link to="/register">S'enregistrer</Link>
+    </div>
+    <Routes>
+      <Route path="/*" element={<App />} />
+    </Routes>
+  </BrowserRouter>
+  // </React.StrictMode>
 );

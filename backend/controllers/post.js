@@ -42,14 +42,16 @@ exports.updatePost = async (req, res) => {
         })
         .catch(err => res.status(400).json(err));
     if (req.UserId != req.postCreatorId && req.isAdmin !== true) { return res.status(400).json({ message: "Non autorisé" }); }
-    const bodyObject = req.file ? {
-        ...req.body,
-        postImage: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
-    } : { ...req.body };
-    await fs.unlink(`images/${imageName}`, () => { console.log("I should have been deleted"); });
-    Post.update({ ...bodyObject }, { where: { id: req.params.id } })
-        .then(() => res.status(200).json({ message: 'Post modifié' }))
-        .catch(err => res.status(400).json(err));
+    else {
+        const bodyObject = req.file ? {
+            ...req.body,
+            postImage: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
+        } : { ...req.body };
+        await fs.unlink(`images/${imageName}`, () => { console.log("I should have been deleted"); });
+        Post.update({ ...bodyObject }, { where: { id: req.params.id } })
+            .then(() => res.status(200).json({ message: 'Post modifié' }))
+            .catch(err => res.status(400).json(err));
+    }
 };
 
 exports.deletePost = async (req, res, id = 0, imageName = "") => {
