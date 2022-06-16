@@ -6,7 +6,7 @@ const User = db.user;
 module.exports = (req, res, next) => {
     try {
         const token = req.headers.authorizations;
-        console.log('token :' + token);
+        console.log(token);
         const decodedToken = jwt.verify(token, process.env.SECRET_TOKEN);
         const UserId = decodedToken.UserId;
         req.UserId = UserId;

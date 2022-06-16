@@ -33,6 +33,14 @@ exports.getOnePost = (req, res, next) => {
         .catch(err => { return res.status(400).json(err); });
 };
 
+// exports.getByUserId = (req, res, next) => {
+//     const id = req.params.id;
+//     const listOfPosts = await Post.findAll({where: { UserId: id }})
+//     Post.findOne({ include: [{ model: User }, { model: Comment, include: { model: User } }] }, { where: { id: id } })
+//         .then(post => { return res.status(200).json(listOfPosts); })
+//         .catch(err => { return res.status(400).json(err); });
+// };
+
 exports.updatePost = async (req, res) => {
     let imageName = "";
     await Post.findOne({ where: { id: req.params.id } })

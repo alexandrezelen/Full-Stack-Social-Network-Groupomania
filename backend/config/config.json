@@ -1,7 +1,7 @@
 {
   "development": {
     "username": "root",
-    "password": "mysql",
+    "password": "Mysql@123",
     "database": "groupomania",
     "host": "127.0.0.1",
     "dialect": "mysql"

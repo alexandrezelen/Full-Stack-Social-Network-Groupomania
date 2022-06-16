@@ -1,13 +1,16 @@
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useEffect, useState, useContext } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import axios from '../api/axios';
+import { AuthContext } from '../helpers/AuthContext';
 
 function Post() {
-    // retrouve l'id du Post
     let { id } = useParams();
     const [postObject, setPostObject] = useState({});
     const [comments, setComments] = useState([]);
     const [newComment, setNewComment] = useState("");
+    const { authState } = useContext(AuthContext);
+
+    let history = useNavigate();
 
     useEffect(() => {
         axios.get(`/post/${id}`).then((response) => {
@@ -27,7 +30,7 @@ function Post() {
             },
                 {
                     headers: {
-                        accessToken: localStorage.getItem("accessToken")
+                        'Authorizations': localStorage.getItem('accessToken')
                     }
                 }
             )
@@ -41,16 +44,48 @@ function Post() {
                 }
             });
     };
+    const deletePost = (id) => {
+        axios.delete(`/post/${id}`, {
+            headers: {
+                'Authorizations': localStorage.getItem('accessToken')
+            }
+        }).then(() => {
+            history('/');
+        });
+    };
+
+    const editPost = (option) => {
+        if (option === "title") {
+            let newTitle = prompt('Nouveau titre :');
+            axios.put('/post/', { newTitle: newTitle, id: id }, {
+                headers: {
+                    'Authorizations': localStorage.getItem('accessToken')
+                }
+            });
+            setPostObject({ ...postObject, title: newTitle });
+        } else {
+            let newText = prompt('Nouveau texte :');
+            axios.put('/post/', { newText: newText, id: id }, {
+                headers: {
+                    'Authorizations': localStorage.getItem('accessToken')
+                }
+            });
+            setPostObject({ ...postObject, text: newText });
+        }
+    };
 
     return (
         <div className="postPage">
             <div className="leftSide">
                 <div className="post" id="individual">
-                    <div className="title"> {postObject.title} </div>
-                    <div className="text">{postObject.text}</div>
+                    <div className="title" onClick={() => { editPost('title'); }}> {postObject.title} </div>
+                    <div className="text" onClick={() => { editPost('text'); }}>{postObject.text}</div>
                     <div className="postImage">{postObject.postImage}</div>
                     <div className="userId">{postObject.userId}</div>
                 </div>
+                {authState.id === postObject.id && (
+                    <button onClick={deletePost(postObject)}>Supprimer ce Post</button>
+                )}
             </div>
             <div className="rightSide">
                 <div className='addCommentContainer'>

@@ -1,6 +1,6 @@
 {
   "files.autoSave": "afterDelay",
-  "editor.fontSize": 12,
+  "editor.fontSize": 14,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "prettier.jsxSingleQuote": true
 }
