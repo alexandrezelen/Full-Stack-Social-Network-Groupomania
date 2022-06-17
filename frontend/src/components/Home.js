@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import React from 'react';
 import axios from '../api/axios';
 import { useEffect, useState } from 'react';
@@ -13,7 +12,7 @@ function Home() {
 
         axios.get("/post/", {
             headers: {
-                'Authorizations': localStorage.getItem('accessToken')
+                'Authorizations': JSON.parse(localStorage.getItem('accessToken'))
             }
         })
             .then((response) => {

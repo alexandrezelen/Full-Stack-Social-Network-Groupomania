@@ -8,8 +8,6 @@ function CreatePost() {
 
     let history = useNavigate();
 
-
-
     const initialValues = {
         title: "",
         text: "",
@@ -50,14 +48,13 @@ function CreatePost() {
                             accept='image/*'
                             id="postImage"
                             onChange={(event) => {
-                                formProps.setFieldValue("postImage", event.currentTarget.files[0]);
+                                formProps.setFieldValue("image", event.currentTarget.files[0]);
                             }}
                         />
 
                         <button type="submit">Créer un Post</button>
                     </Form>
                 )}
-
             </Formik>
         </div >
     );

@@ -6,7 +6,6 @@ const bcrypt = require("bcrypt");
 const dotenv = require('dotenv').config();
 const passwordSchema = require('../middlewares/password-validator.js');
 const { sign } = require('jsonwebtoken');
-const { user } = require("../models");
 const fs = require("fs");
 
 exports.signup = (req, res, next) => {
@@ -108,11 +107,8 @@ exports.updatePicture = async (req, res) => {
         .then(userModify => {
             const oldUrl = User.profilePicture.split('/images/')[1];
             if (req.file) {
-
             }
         })
-
-        // **
         .then((user) => {
             if (!user.profilePicture) {
                 let picture = "";

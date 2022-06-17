@@ -10,7 +10,6 @@ const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [errMsg, setErrMsg] = useState('');
-    // const [isLoggedin, setIsLoggedin] = useState(false);
 
     useEffect(() => {
         emailRef.current.focus();
@@ -28,19 +27,10 @@ const Login = () => {
             const response = await axios.post(tools.memo.LOGIN_URL, { ...userForm });
             console.log(response.data);
             localStorage.setItem("accessToken", JSON.stringify(response.data));
-            // setIsLoggedin(true);
-            // setEmail('');
-            // setPassword('');
-
-            // const logout = () => {
-            //     localStorage.removeItem("accessToken", JSON.stringify(response.data));
-            //     setIsLoggedin(true);
-            // };
 
             return tools.redirectToHome();
-        }
 
-        catch (err) {
+        } catch (err) {
             if (!err?.response) {
                 setErrMsg('Pas de réponse du serveur');
             } else if (err.response?.status === 400) {
@@ -59,8 +49,6 @@ const Login = () => {
         <section>
             <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
             <h1>Se connecter</h1>
-            {/* {!isLoggedin ? (
-                <> */}
             <form onSubmit={handleSubmit}>
                 <label htmlFor="email">Email :</label>
                 <input
@@ -85,13 +73,6 @@ const Login = () => {
                 />
                 <button>Se connecter</button>
             </form>
-            {/* </>
-            ) : (
-                <>
-                <h1>User is logged in</h1>
-            <button onClickCapture={logout}>logout user</button>
-                </>
-            )} */}
             <p>
                 Besoin de créer un compte ?<br />
                 <span className="line">

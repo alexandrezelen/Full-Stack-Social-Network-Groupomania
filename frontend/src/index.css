@@ -87,7 +87,7 @@ button {
   bottom: -10px;
 }
 
-.instructions > svg {
+.instructions>svg {
   margin-right: 0.25rem;
 }
 
@@ -126,14 +126,17 @@ button {
 
 .navbar {
   height: 100px;
+  width: 10rem;
   display: flex;
-  align-items: center;
+  position: absolute;
+  flex-direction: column;
   font-family: "Nunito", sans-serif;
 }
 
 .navbar a {
-  margin-left: 25px;
+  margin-left: 30px;
   text-decoration: none;
+  margin-bottom: 20px;
 }
 
 /* createPost */
@@ -160,4 +163,20 @@ button {
 
 .formContainer button:hover {
   cursor: pointer;
+}
+
+@media (max-width: 738px) {
+  .navbar {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    flex-direction: inherit;
+    position: relative;
+    padding: 1rem;
+  }
+
+  .navbar a {
+    margin: 0;
+    padding: 0.2rem;
+  }
 }
