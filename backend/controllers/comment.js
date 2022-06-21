@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const db = require('../models');
 const Comment = db.comment;
+const User = db.user;
 
 exports.createComment = async (req, res) => {
     const comment = { text: req.body.text, UserId: req.UserId, PostId: Number(req.params.postId) };
@@ -13,7 +14,15 @@ exports.createComment = async (req, res) => {
 };
 
 exports.getAllComments = async (req, res) => {
-    try { await Comment.findAll({ where: { PostId: req.params.postId } }).then(comments => res.status(200).json(comments)); }
+    try {
+        await Comment.findAll({
+            include: [
+                { model: User, attributes: { exclude: ["password"] } }
+            ],
+            where: { PostId: req.params.postId }
+        })
+            .then(comments => res.status(200).json(comments));
+    }
     catch (err) { err => res.status(400).json(err); }
 };
 

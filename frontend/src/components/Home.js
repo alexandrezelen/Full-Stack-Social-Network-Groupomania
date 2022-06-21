@@ -1,24 +1,17 @@
 import React from 'react';
 import axios from '../api/axios';
 import { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import * as tools from "./Tool";
+import { useNavigate } from 'react-router-dom';
 
 function Home() {
     const [listOfPosts, setListOfPosts] = useState([]);
     let history = useNavigate();
-    useEffect(() => {
-        const response = tools.checkUser();
 
-        axios.get("/post/", {
-            headers: {
-                'Authorizations': JSON.parse(localStorage.getItem('accessToken'))
-            }
-        })
-            .then((response) => {
-                console.log(response);
-                setListOfPosts(response.data);
-            })
+    useEffect(() => {
+        // const response = tools.checkUser();
+
+        axios.get("/post/", { headers: { 'Authorizations': JSON.parse(localStorage.getItem('accessToken')) } })
+            .then((res) => { console.log(res); setListOfPosts(res.data); })
             .catch(err => console.log(err));
     }, []);
 
@@ -26,11 +19,8 @@ function Home() {
         <div>{listOfPosts.map((value, key) => {
             return (
                 <div key={key} className="post" onClick={() => { history(`/post/${value.id}`); }}>
-                    <div className="title"> {value.title} </div>
-                    <div className="text">{value.text}</div>
-                    <div className="userId">
-                        <Link to={`/profile/${value.userId}`}>{value.userId}</Link>
-                    </div>
+                    <h2 className="title"> {value.title} </h2>
+                    <p className="text">{value.text}</p>
                     <img className='postImage' src={value.postImage} alt="" />
                 </div>
             );

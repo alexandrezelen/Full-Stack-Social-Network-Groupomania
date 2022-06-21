@@ -116,6 +116,11 @@ exports.updatePicture = async (req, res) => {
                 // `${req.protocol}://${req.get("host")}/images/${ req.file.filename }`;
             } else {
                 //fs.unlink
+                fs.unlink(`images/${filename}`, () => {
+                    User.destroy({ where: { id: id } });
+                    res.status(200).json({ message: 'profil supprimé' })
+                        .catch(err => res.status(403).json({ error }));
+                });
             }
         })
         .catch(err => res.status(400).json(err));

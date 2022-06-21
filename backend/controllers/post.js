@@ -21,25 +21,22 @@ exports.createPost = async (req, res) => {
 };
 
 exports.getAllPosts = (req, res) => {
-    Post.findAll({ include: [{ model: User }, { model: Comment, include: { model: User } }] })
+    Post.findAll({
+        include: [
+            { model: User, attributes: { exclude: ['password'] } },
+            // { model: Comment, include: [{ model: User, attributes: { exclude: ['password'] } }] }
+        ]
+    })
         .then(posts => { return res.status(200).json(posts); })
         .catch(err => { return res.status(400).json(err); });
 };
 
 exports.getOnePost = (req, res, next) => {
     const id = req.params.id;
-    Post.findOne({ include: [{ model: User }, { model: Comment, include: { model: User } }] }, { where: { id: id } })
+    Post.findOne({ include: [{ model: User, attributes: { exclude: ['password'] } }], where: { id: id } })
         .then(post => { return res.status(200).json(post); })
         .catch(err => { return res.status(400).json(err); });
 };
-
-// exports.getByUserId = (req, res, next) => {
-//     const id = req.params.id;
-//     const listOfPosts = await Post.findAll({where: { UserId: id }})
-//     Post.findOne({ include: [{ model: User }, { model: Comment, include: { model: User } }] }, { where: { id: id } })
-//         .then(post => { return res.status(200).json(listOfPosts); })
-//         .catch(err => { return res.status(400).json(err); });
-// };
 
 exports.updatePost = async (req, res) => {
     let imageName = "";

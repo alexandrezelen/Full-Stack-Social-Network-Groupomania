@@ -45,6 +45,7 @@ form {
 a,
 a:visited {
   color: #fff;
+  font-style: italic;
 }
 
 img {
@@ -52,12 +53,22 @@ img {
   width: 50%;
   border-radius: 10px;
   color: red;
+  margin-top: 1rem;
+  border: white 1px solid;
+  padding: 1rem;
+  margin-bottom: 2rem;
 }
 
-input[type="text"],
 input[type="password"],
 button,
 textarea {
+  font-family: "Nunito", sans-serif;
+  font-size: 22px;
+  padding: 0.25rem;
+  border-radius: 0.5rem;
+}
+
+input[type="text"] {
   font-family: "Nunito", sans-serif;
   font-size: 22px;
   padding: 0.25rem;
@@ -134,9 +145,11 @@ button {
 }
 
 .navbar a {
+  margin-top: 1.5rem;
   margin-left: 30px;
   text-decoration: none;
   margin-bottom: 20px;
+  text-decoration: underline;
 }
 
 /* createPost */
@@ -177,6 +190,44 @@ button {
 
   .navbar a {
     margin: 0;
-    padding: 0.2rem;
+    padding: 0.4rem;
+    font-size: larger;
   }
+}
+
+.addCommentContainer {
+  display: flex;
+  flex-direction: column;
+  margin-top: 2rem;
+  margin-left: 1rem;
+  margin-right: 1rem;
+}
+
+.comment {
+  display: flex;
+  flex-direction: column;
+  margin-top: 1rem;
+  margin-left: 1rem;
+  margin-bottom: 2rem;
+}
+
+.commentBttn {
+  margin-bottom: 2rem;
+}
+
+/* Fil d'acutalité */
+
+.post {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  margin-top: 2rem;
+}
+
+.text {
+  margin-top: 0.5rem;
+}
+
+.title {
+  font-style: italic;
 }

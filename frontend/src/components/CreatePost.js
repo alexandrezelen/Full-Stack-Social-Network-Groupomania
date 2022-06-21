@@ -32,7 +32,7 @@ function CreatePost() {
             <Formik initialValues={initialValues} onSubmit={onSubmit} validationSchema={validationSchema}>
                 {(formProps) => (
                     <Form className="formContainer">
-                        <h1>Créer un Post</h1>
+                        <h1>Post</h1>
                         <label>Titre :</label>
                         <ErrorMessage name="title" component="span" />
                         <Field autoComplete="off" id="inputCreatePost" name="title" placeholder="..." />

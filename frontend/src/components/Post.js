@@ -1,190 +1,79 @@
-// import React, { useEffect, useState, useContext } from 'react';
-// import { useParams, useNavigate } from 'react-router-dom';
-// import axios from '../api/axios';
-
-// function Post() {
-//     let { id } = useParams();
-//     const [postObject, setPostObject] = useState({});
-//     const [comments, setComments] = useState([]);
-//     const [newComment, setNewComment] = useState("");
-
-//     let history = useNavigate();
-
-//     useEffect(() => {
-//         axios.get(`/post/${id}`).then((response) => {
-//             setPostObject(response.data);
-//         });
-
-//         axios.get(`/comment/${id}`).then((response) => {
-//             setComments(response.data);
-//         });
-//     }, [id]);
-
-//     const addComment = () => {
-//         axios
-//             .post("/comment/", {
-//                 text: newComment,
-//                 PostId: id,
-//             },
-//                 {
-//                     headers: {
-//                         'Authorizations': localStorage.getItem('accessToken')
-//                     }
-//                 }
-//             )
-//             .then((response) => {
-//                 if (response.data.error) {
-//                     console.log(response.data.error);
-//                 } else {
-//                     const commentToAdd = { text: newComment };
-//                     setComments([...comments, commentToAdd]);
-//                     setNewComment("");
-//                 }
-//             });
-//     };
-//     const deletePost = (id) => {
-//         axios.delete(`/post/${id}`, {
-//             headers: {
-//                 'Authorizations': localStorage.getItem('accessToken')
-//             }
-//         }).then(() => {
-//             history('/');
-//         });
-//     };
-
-//     const editPost = (option) => {
-//         if (option === "title") {
-//             let newTitle = prompt('Nouveau titre :');
-//             axios.put('/post/', { newTitle: newTitle, id: id }, {
-//                 headers: {
-//                     'Authorizations': localStorage.getItem('accessToken')
-//                 }
-//             });
-//             setPostObject({ ...postObject, title: newTitle });
-//         } else {
-//             let newText = prompt('Nouveau texte :');
-//             axios.put('/post/', { newText: newText, id: id }, {
-//                 headers: {
-//                     'Authorizations': localStorage.getItem('accessToken')
-//                 }
-//             });
-//             setPostObject({ ...postObject, text: newText });
-//         }
-//     };
-
-//     return (
-//         <div className="postPage">
-//             <div className="leftSide">
-//                 <div className="post" id="individual">
-//                     <div className="title" onClick={() => { editPost('title'); }}> {postObject.title} </div>
-//                     <div className="text" onClick={() => { editPost('text'); }}>{postObject.text}</div>
-//                     <div className="postImage">{postObject.postImage}</div>
-//                     <div className="userId">{postObject.userId}</div>
-//                 </div>
-//                 {authState.id === postObject.id && (
-//                     <button onClick={deletePost(postObject)}>Supprimer ce Post</button>
-//                 )}
-//             </div>
-//             <div className="rightSide">
-//                 <div className='addCommentContainer'>
-//                     <input type="text"
-//                         placeholder='Commentaire...'
-//                         autoComplete='off'
-//                         value={newComment}
-//                         onChange={(event) => {
-//                             setNewComment(event.target.value);
-//                         }}
-//                     />
-//                     <button onClick={addComment}>Ajouter un Commentaire</button>
-//                 </div>
-//                 <div className='listOfComments'>
-//                     {comments.map((comment, key) => {
-//                         return (
-//                             <div key={key} className='comment'>
-//                                 {comment.text}
-//                             </div>
-//                         );
-//                     })}
-//                 </div>
-//             </div>
-//         </div>
-//     );
-// }
-
-// export default Post;
-
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from '../api/axios';
 
 function Post() {
-    // retrouve l'id du Post
     let { id } = useParams();
-    const [postObject, setPostObject] = useState({});
-    const [comments, setComments] = useState([]);
+    const postId = id;
+    console.log(id, postId);
+
+    const [postObject, setPostObject] = useState({ title: "title", text: 'text', postImage: "", User: { firstname: "firstname", lastname: "lastname" } });
+    const [comments, setComments] = useState(['text']);
     const [newComment, setNewComment] = useState("");
-
-    useEffect(() => {
-        axios.get(`/post/${id}`).then((response) => {
-            setPostObject(response.data);
-        });
-
-        axios.get(`/comment/${id}`).then((response) => {
-            setComments(response.data);
-        });
-    }, [id]);
+    const [user, setUser] = useState(['text']);
 
     const addComment = () => {
-        axios
-            .post("/comment/", {
-                text: newComment,
-                PostId: id,
-            },
-                {
-                    headers: {
-                        accessToken: localStorage.getItem("accessToken")
-                    }
-                }
-            )
+        const Headers = { headers: { 'Authorizations': JSON.parse(localStorage.getItem('accessToken')) } };
+        axios.post(`/comment/${postId}`, { text: newComment, PostId: postId }, Headers)
             .then((response) => {
-                if (response.data.error) {
-                    console.log(response.data.error);
-                } else {
-                    const commentToAdd = { text: newComment };
-                    setComments([...comments, commentToAdd]);
-                    setNewComment("");
-                }
-            });
+                const commentToAdd = { text: newComment };
+                setComments([...comments, commentToAdd]);
+                setNewComment("");
+            })
+            .catch(error => console.log(error));
     };
+
+    // const deleteComment = (event) => {
+    //     console.log(event)
+    //     const Headers = { headers: { 'Authorizations': JSON.parse(localStorage.getItem('accessToken')) } };
+    //     axios.delete(`/comment/${event.data.id}`, Headers)
+    //         .then((res) => {
+    //             console.log(res)
+    //         })
+    //         .catch(error => console.log(error));
+    // };
+
+    useEffect(() => {
+        const Headers = { headers: { 'Authorizations': JSON.parse(localStorage.getItem('accessToken')) } };
+        axios.get(`/post/one/${id}`, Headers).then((res) => { console.log(res.data); setPostObject(res.data); })
+            .catch(error => console.log(error));
+        axios.get(`/comment/${postId}`, Headers).then((res) => { console.log(res.data); setComments(res.data); }).catch(error => console.log(error));
+    }, [id, postId]);
 
     return (
         <div className="postPage">
-            <div className="leftSide">
+            <article className="upSide">
                 <div className="post" id="individual">
-                    <div className="title"> {postObject.title} </div>
-                    <div className="text">{postObject.text}</div>
-                    <div className="postImage">{postObject.postImage}</div>
-                    <div className="userId">{postObject.userId}</div>
+                    <h2 className="title"> {postObject.title} </h2>
+                    <p className="text">{postObject.text}</p>
+                    {/* eslint-disable-next-line */}
+                    <img className="postImage" src={postObject.postImage} alt="a post image" />
+                    <h3 className="userId">{postObject.User.firstname} {postObject.User.lastname}</h3>
                 </div>
-            </div>
-            <div className="rightSide">
+            </article>
+            <div className="downSide">
                 <div className='addCommentContainer'>
                     <input type="text"
                         placeholder='Commentaire...'
                         autoComplete='off'
                         value={newComment}
-                        onChange={(event) => {
-                            setNewComment(event.target.value);
-                        }}
+                        onChange={(event) => { setNewComment(event.target.value); }}
                     />
-                    <button onClick={addComment}>Ajouter un Commentaire</button>
+                    <button className='commentBttn' onClick={addComment}>Ajouter un Commentaire</button>
                 </div>
                 <div className='listOfComments'>
-                    {comments.map((comment, key) => {
+                    {comments.map((comment, i) => {
+                        i++
                         return (
-                            <div key={key} className='comment'>
-                                {comment.text}
+                            <div className='comment__box'>
+                                <div className='comment__text'>
+                                    {/* <h3>{comment.User.firstname} {comment.User.lastname}</h3> */}
+                                    <p key={i} className='comment'>{comment.text}</p>
+                                </div>
+                                {/* <p className='delete__comment' id='deleteComment' onClick={deleteComment}>X</p> */}
                             </div>
+
                         );
                     })}
                 </div>
