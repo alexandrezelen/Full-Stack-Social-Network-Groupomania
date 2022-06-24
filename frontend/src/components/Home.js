@@ -8,8 +8,6 @@ function Home() {
     let history = useNavigate();
 
     useEffect(() => {
-        // const response = tools.checkUser();
-
         axios.get("/post/", { headers: { 'Authorizations': JSON.parse(localStorage.getItem('accessToken')) } })
             .then((res) => { console.log(res); setListOfPosts(res.data); })
             .catch(err => console.log(err));

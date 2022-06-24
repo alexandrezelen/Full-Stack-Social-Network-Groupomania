@@ -3,26 +3,31 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from '../api/axios';
 
-function Post() {
+function Post(post) {
     let { id } = useParams();
     const postId = id;
     console.log(id, postId);
 
     const [postObject, setPostObject] = useState({ title: "title", text: 'text', postImage: "", User: { firstname: "firstname", lastname: "lastname" } });
-    const [comments, setComments] = useState(['text']);
+    const [comments, setComments] = useState([]);
     const [newComment, setNewComment] = useState("");
-    const [user, setUser] = useState(['text']);
 
     const addComment = () => {
         const Headers = { headers: { 'Authorizations': JSON.parse(localStorage.getItem('accessToken')) } };
         axios.post(`/comment/${postId}`, { text: newComment, PostId: postId }, Headers)
-            .then((response) => {
-                const commentToAdd = { text: newComment };
+            .then((res) => {
+                let user = res.data.userData;
+                const commentToAdd = { text: newComment, User: { firstname: user.firstname, lastname: user.lastname } };
                 setComments([...comments, commentToAdd]);
                 setNewComment("");
             })
             .catch(error => console.log(error));
     };
+
+    
+    // function handleAddComment(comment) {
+    //     setComments([...comments, comment])
+    // }
 
     // const deleteComment = (event) => {
     //     console.log(event)
@@ -35,14 +40,19 @@ function Post() {
     // };
 
     useEffect(() => {
-        const Headers = { headers: { 'Authorizations': JSON.parse(localStorage.getItem('accessToken')) } };
-        axios.get(`/post/one/${id}`, Headers).then((res) => { console.log(res.data); setPostObject(res.data); })
-            .catch(error => console.log(error));
-        axios.get(`/comment/${postId}`, Headers).then((res) => { console.log(res.data); setComments(res.data); }).catch(error => console.log(error));
+        function getData() {
+            const Headers = { headers: { 'Authorizations': JSON.parse(localStorage.getItem('accessToken')) } };
+            axios.get(`/post/one/${id}`, Headers).then((res) => { setPostObject(res.data); }).catch(error => console.log(error));
+            axios.get(`/comment/${postId}`, Headers).then((res) => { setComments(res.data); }).catch(error => console.log(error));
+        }
+        getData();
+
     }, [id, postId]);
 
+
+
     return (
-        <div className="postPage">
+        <div key={String(post.id)} className="postPage">
             <article className="upSide">
                 <div className="post" id="individual">
                     <h2 className="title"> {postObject.title} </h2>
@@ -63,13 +73,13 @@ function Post() {
                     <button className='commentBttn' onClick={addComment}>Ajouter un Commentaire</button>
                 </div>
                 <div className='listOfComments'>
-                    {comments.map((comment, i) => {
-                        i++
+                    {comments.map((comment, key) => {
+                        let user = { ...comment.User };
                         return (
-                            <div className='comment__box'>
+                            <div key={Math.floor(Math.random() * 1000)} className='comment__box'>
                                 <div className='comment__text'>
-                                    {/* <h3>{comment.User.firstname} {comment.User.lastname}</h3> */}
-                                    <p key={i} className='comment'>{comment.text}</p>
+                                    <h4 key={key}>{user.firstname} {user.lastname}</h4>
+                                    <p className='comment'>{comment.text}</p>
                                 </div>
                                 {/* <p className='delete__comment' id='deleteComment' onClick={deleteComment}>X</p> */}
                             </div>
