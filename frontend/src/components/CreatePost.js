@@ -51,7 +51,6 @@ function CreatePost() {
                                 formProps.setFieldValue("image", event.currentTarget.files[0]);
                             }}
                         />
-
                         <button type="submit">Créer un Post</button>
                     </Form>
                 )}

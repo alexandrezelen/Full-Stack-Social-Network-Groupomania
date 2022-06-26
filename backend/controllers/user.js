@@ -50,6 +50,7 @@ exports.getMe = (req, res, next) => {
 };
 
 exports.getProfile = (req, res, next) => {
+   console.log(53);
     User.findOne({
         attributes: ["firstname", "lastname", "email"],
         where: { id: req.params.id }

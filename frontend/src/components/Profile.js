@@ -1,32 +1,31 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import axios from '../api/axios';
+import { checkUser } from '../components/Tool';
 
 function Profile() {
-
-    let { id } = useParams();
-    let history = useNavigate();
+    // let { id } = useParams();
+    let id = '';
     const [firstname, setFirstname] = useState('');
-    const [lastname, setLastname] = useState('');
-    
 
-    useEffect(() => {
-        axios.get(`/user/${id}`).then((response) => {
-            setFirstname(response.data.firstname);
-        }); 
-    }, [id]);
+    useEffect(() => {        
+        let token = JSON.parse(localStorage.getItem('accessToken'));
+        checkUser().then((res)=>{
+            id = res.id;
+            axios.get(`/user/${id}`, { headers: { "Authorizations": token } }).then((response) => {
+                console.log(response);
+                setFirstname(response.data.user.firstname);
+            });
+            ;
+        })
+        
+    }, []);
 
     return (
         <div className='profilePageContainer'>
             <div className="basicInfo">
                 {" "}
                 <h1>{firstname}</h1>
-                {firstname === firstname && (
-                    <button onClick={() => { history('/changepassword'); }} >
-                     
-                        Changer le mot de passe
-                    </button>
-                )}
             </div>
         </div>
     );

@@ -50,7 +50,6 @@ const Login = () => {
     };
 
     return (
-
         <section>
             <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
             <h1>Connexion</h1>
@@ -88,4 +87,4 @@ const Login = () => {
     );
 };
 
-export default Login;;
+export default Login;

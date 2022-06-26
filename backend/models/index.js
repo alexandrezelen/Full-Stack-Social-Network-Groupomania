@@ -15,7 +15,6 @@ if (config.use_env_variable) {
   sequelize = new Sequelize(config.database, config.username, config.password, config);
 }
 
-// Verify if the server is succesfully connected with the Database
 try {
   sequelize.authenticate();
   console.log('Connection has been established successfully.');

@@ -6,8 +6,6 @@ import axios from '../api/axios';
 function Post(post) {
     let { id } = useParams();
     const postId = id;
-    console.log(id, postId);
-
     const [postObject, setPostObject] = useState({ title: "title", text: 'text', postImage: "", User: { firstname: "firstname", lastname: "lastname" } });
     const [comments, setComments] = useState([]);
     const [newComment, setNewComment] = useState("");
@@ -24,21 +22,6 @@ function Post(post) {
             .catch(error => console.log(error));
     };
 
-    
-    // function handleAddComment(comment) {
-    //     setComments([...comments, comment])
-    // }
-
-    // const deleteComment = (event) => {
-    //     console.log(event)
-    //     const Headers = { headers: { 'Authorizations': JSON.parse(localStorage.getItem('accessToken')) } };
-    //     axios.delete(`/comment/${event.data.id}`, Headers)
-    //         .then((res) => {
-    //             console.log(res)
-    //         })
-    //         .catch(error => console.log(error));
-    // };
-
     useEffect(() => {
         function getData() {
             const Headers = { headers: { 'Authorizations': JSON.parse(localStorage.getItem('accessToken')) } };
@@ -46,16 +29,13 @@ function Post(post) {
             axios.get(`/comment/${postId}`, Headers).then((res) => { setComments(res.data); }).catch(error => console.log(error));
         }
         getData();
-
     }, [id, postId]);
-
-
 
     return (
         <div key={String(post.id)} className="postPage">
             <article className="upSide">
                 <div className="post" id="individual">
-                    <h2 className="title"> {postObject.title} </h2>
+                    <h2 className="title"> {postObject.title}</h2>
                     <p className="text">{postObject.text}</p>
                     {/* eslint-disable-next-line */}
                     <img className="postImage" src={postObject.postImage} alt="a post image" />
@@ -70,7 +50,7 @@ function Post(post) {
                         value={newComment}
                         onChange={(event) => { setNewComment(event.target.value); }}
                     />
-                    <button className='commentBttn' onClick={addComment}>Ajouter un Commentaire</button>
+                    <button className='commentBttn' onClick={addComment}>Ajouter</button>
                 </div>
                 <div className='listOfComments'>
                     {comments.map((comment, key) => {

@@ -1,38 +1,37 @@
-// import './index.css';
-// import App from './App';
-// import React from 'react';
-// import ReactDOM from 'react-dom/client';
-// import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
-
-// const root = ReactDOM.createRoot(document.getElementById('root'));
-// root.render(
-//   <BrowserRouter>
-//     <div className="navbar">
-//       <Link to="/register">S'enregistrer</Link>
-//       <Link to="/login">Connexion</Link>
-//       <Link to="/">Actualité</Link>
-//       <Link to="/createpost">Post</Link>
-//       <Link to="/profile">Profil</Link>
-//       <Link to="/login" onClick={e => localStorage.removeItem("accessToken")}>Déconnexion</Link>
-//     </div>
-//     <Routes>
-//       <Route path="/*" element={<App />} />
-//     </Routes>
-//   </BrowserRouter>
-// );
-
 import './index.css';
+import axios from './api/axios';
 import React from "react";
 import { createRoot } from "react-dom/client";
 import App from "./App";
 
-const root = createRoot(document.getElementById('root'))
+const root = createRoot(document.getElementById('root'));
 
-root.render (<App />)
+function isTokenExpired() {
+    console.log('start isTokenExpired');
+    root.render(<App />);
+    // if (!window.location.href.includes('/login')
+    //     && !window.location.href.includes('/register')) {
+    //     try {
+    //         let token = JSON.parse(localStorage.getItem('accessToken'));
+    //         axios.get("/user/me", { headers: { "Authorizations": token } })
+    //             .then((res) => {
+    //                 console.log('res.status: ' + res.status);
+    //                 if (res.status !== 401) {
+    //                     let profile = { id: res.data.id, isAdmin: res.data.isAdmin };
+    //                     console.log('return checkUser profile.id: ' + profile.id);
+    //                     root.render(<App />);
+    //                 } else {
+    //                     window.location.href = '/login';
+    //                     root.render(<App />);
+    //                 }
+    //             })
+    //             .catch(error => {
+    //                 console.log('catch1: ' + error);
+    //                 window.location.href = '/login';
+    //                 root.render(<App />);
+    //             });
+    //     } catch (error) { console.log('catch2: ' + error); }
+    // }
+}
 
-// ReactDOM.render(
-//   <React.StrictMode>
-//     (<App />)
-//   </React.StrictMode>,
-//   document.getElementById("root")
-// );
+isTokenExpired();
