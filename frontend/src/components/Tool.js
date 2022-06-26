@@ -10,6 +10,7 @@ export async function checkUser() {
         let token = JSON.parse(localStorage.getItem('accessToken'));
         let user = await axios.get("/user/me", { headers: { "Authorizations": token } });
         let profile = { id: user.data.id, isAdmin: user.data.isAdmin };
+        console.log(profile);
         return profile;
     } catch (error) { console.log(error); }
 }

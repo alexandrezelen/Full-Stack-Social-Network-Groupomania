@@ -25,7 +25,7 @@ function Post(post) {
     useEffect(() => {
         function getData() {
             const Headers = { headers: { 'Authorizations': JSON.parse(localStorage.getItem('accessToken')) } };
-            axios.get(`/post/one/${id}`, Headers).then((res) => { setPostObject(res.data); }).catch(error => console.log(error));
+            axios.get(`/post/${id}`, Headers).then((res) => { setPostObject(res.data); }).catch(error => console.log(error));
             axios.get(`/comment/${postId}`, Headers).then((res) => { setComments(res.data); }).catch(error => console.log(error));
         }
         getData();

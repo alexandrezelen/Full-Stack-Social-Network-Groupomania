@@ -151,7 +151,6 @@ button {
 
 .formContainer {
   min-height: 400px;
-  width: 20rem;
   margin: auto;
   display: flex;
   flex-direction: column;
@@ -172,36 +171,6 @@ button {
 .formContainer button:hover {
   cursor: pointer;
 }
-
-/* @media (min-width: 739px) {
-  .navbar a {
-    margin-left: 30px;
-    text-decoration: none;
-    margin-bottom: 20px;
-    padding: 0.5rem;
-    border-radius: 20px;
-    text-align: center;
-    width: 7rem;
-  }
-}
-
-@media (max-width: 738px) {
-  .navbar {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    flex-direction: inherit;
-    position: relative;
-    padding: 1rem;
-    flex-wrap: wrap;
-  }
-
-  .navbar a {
-    margin: 0;
-    padding: 0.4rem;
-    text-decoration: none;
-  }
-} */
 
 .addCommentContainer {
   display: flex;
@@ -240,4 +209,12 @@ button {
 
 .text {
   margin-top: 0.5rem;
+}
+
+/* Profil */
+
+.basicInfo {
+  margin-top: 4rem;
+  display: flex;
+  flex-direction: column;
 }
