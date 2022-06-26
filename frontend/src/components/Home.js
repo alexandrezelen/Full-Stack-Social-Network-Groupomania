@@ -14,15 +14,13 @@ function Home() {
     }, []);
 
     return (
-        <div>{listOfPosts.map((value, key) => {
-            return (
-                <div key={key} className="post" onClick={() => { history(`/post/${value.id}`); }}>
-                    <h2 className="title"> {value.title} </h2>
-                    <p className="text">{value.text}</p>
-                    <img className='postImage' src={value.postImage} alt="" />
-                </div>
-            );
-        })}</div>
+        [...listOfPosts].reverse().map((value, key) => (
+            <div key={key} className="post" onClick={() => { history(`/post/${value.id}`); }}>
+                <h2 className="title"> {value.title} </h2>
+                <p className="text">{value.text}</p>
+                <img className='postImage' src={value.postImage} alt="" />
+            </div>
+        ))
     );
 }
 
