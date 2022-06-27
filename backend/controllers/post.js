@@ -59,6 +59,18 @@ exports.updatePost = async (req, res) => {
     }
 };
 
+// exports.updateTitle = async (req, res) => {
+//     const { newTitle, id } = req.body;
+//     await Post.update({ title: newTitle }, { where: { id: id } });
+//     res.json(newTitle);
+// };
+
+// exports.updateText = async (req, res) => {
+//     const { newText, id } = req.body;
+//     await Post.update({ title: newText }, { where: { id: id } });
+//     res.json(newText);
+// };
+
 exports.deletePost = async (req, res, id = 0, imageName = "") => {
     await Post.findOne({ where: { id: req.params.id } })
         .then((post) => {

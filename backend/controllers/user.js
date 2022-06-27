@@ -7,6 +7,7 @@ const dotenv = require('dotenv').config();
 const passwordSchema = require('../middlewares/password-validator.js');
 const { sign } = require('jsonwebtoken');
 const fs = require("fs");
+const Post = require("../models/Post");
 
 exports.signup = (req, res, next) => {
     console.log(req.body);
@@ -50,7 +51,6 @@ exports.getMe = (req, res, next) => {
 };
 
 exports.getProfile = (req, res, next) => {
-   console.log(53);
     User.findOne({
         attributes: ["firstname", "lastname", "email", "department", "profilePicture"],
         where: { id: req.params.id }
@@ -87,7 +87,6 @@ exports.updatePassword = async (req, res) => {
         const user = await User.findOne({ where: { id: req.UserId } });
         bcrypt.compare(oldPassword, user.password).then(async (match) => {
             if (!match) res.json({ error: 'Mauvais mot de passe entré' });
-
             bcrypt.hash(newPassword, 10).then((hash) => {
                 User.update(
                     { password: hash },

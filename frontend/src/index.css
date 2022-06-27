@@ -24,6 +24,7 @@ body {
 
 h1 {
   font-size: 30px;
+  margin-bottom: 1rem;
 }
 
 h4 {
@@ -217,4 +218,15 @@ button {
   margin-top: 4rem;
   display: flex;
   flex-direction: column;
+}
+
+.passwordContainer {
+  margin-top: 4rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.passwordInput {
+  margin-bottom: 1rem;
 }

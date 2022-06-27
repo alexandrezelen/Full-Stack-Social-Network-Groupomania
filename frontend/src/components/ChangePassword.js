@@ -7,7 +7,7 @@ function ChangePassword() {
     const [newPassword, setNewPassword] = useState('');
 
     const changePassword = () => {
-        axios.put('/user/password/', {
+        axios.patch('/user/password/', {
             oldPassword: oldPassword,
             newPassword: newPassword
         }, {
@@ -23,9 +23,10 @@ function ChangePassword() {
     };
 
     return (
-        <div>
-            <h1>Change ton mot de passe</h1>
+        <div className='passwordContainer'>
+            <h1>Modifier le mot de passe</h1>
             <input
+                className='passwordInput'
                 type='text'
                 placeholder='Ancien mot de passe...'
                 onChange={(event) => {
@@ -34,7 +35,7 @@ function ChangePassword() {
             />
             <input
                 type='text'
-                placeholder='Nouveau mot de passe'
+                placeholder='Nouveau mot de passe...'
                 onChange={(event) => {
                     setNewPassword(event.target.value);
                 }}
