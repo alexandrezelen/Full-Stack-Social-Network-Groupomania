@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import axios from '../api/axios';
+import { useParams } from 'react-router-dom';
 
 function ChangePassword() {
-
+    let { id } = useParams();
     const [oldPassword, setOldPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
 
     const changePassword = () => {
-        axios.patch('/user/password/', {
+        axios.patch(`/user/password/${id}`, {
             oldPassword: oldPassword,
             newPassword: newPassword
         }, {
@@ -16,8 +17,11 @@ function ChangePassword() {
             }
         }
         ).then((response) => {
+            console.log(response);
             if (response.data.error) {
                 alert(response.data.error);
+            } else {
+                alert('Changement effectué');
             }
         });
     };
@@ -28,19 +32,20 @@ function ChangePassword() {
             <input
                 className='passwordInput'
                 type='text'
-                placeholder='Ancien mot de passe...'
+                placeholder='Mot de passe actuel...'
                 onChange={(event) => {
                     setOldPassword(event.target.value);
                 }}
             />
             <input
+                className='passwordInput'
                 type='text'
                 placeholder='Nouveau mot de passe...'
                 onChange={(event) => {
                     setNewPassword(event.target.value);
                 }}
             />
-            <button onClick={changePassword}>Enregistrer le nouveau mot de passe</button>
+            <button onClick={changePassword}>Enregistrer</button>
         </div>
     );
 }

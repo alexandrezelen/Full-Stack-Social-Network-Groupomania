@@ -24,7 +24,6 @@ exports.getAllPosts = (req, res) => {
     Post.findAll({
         include: [
             { model: User, attributes: { exclude: ['password'] } },
-            // { model: Comment, include: [{ model: User, attributes: { exclude: ['password'] } }] }
         ]
     })
         .then(posts => { return res.status(200).json(posts); })
@@ -58,18 +57,6 @@ exports.updatePost = async (req, res) => {
             .catch(err => res.status(400).json(err));
     }
 };
-
-// exports.updateTitle = async (req, res) => {
-//     const { newTitle, id } = req.body;
-//     await Post.update({ title: newTitle }, { where: { id: id } });
-//     res.json(newTitle);
-// };
-
-// exports.updateText = async (req, res) => {
-//     const { newText, id } = req.body;
-//     await Post.update({ title: newText }, { where: { id: id } });
-//     res.json(newText);
-// };
 
 exports.deletePost = async (req, res, id = 0, imageName = "") => {
     await Post.findOne({ where: { id: req.params.id } })

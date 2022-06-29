@@ -1,37 +1,64 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import axios from '../api/axios';
-import { checkUser } from '../components/Tool';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import { AuthContext } from '../helpers/AuthContext';
 
-function Profile() {
+function Profile({ user }) {
+    let { id } = useParams();
+    let history = useNavigate();
+
     const [firstname, setFirstname] = useState('');
     const [lastname, setLastname] = useState('');
     const [email, setEmail] = useState('');
-    let history = useNavigate();
+    const [roleProfile, setRoleProfile] = useState("false");
+    const { authState, setAuthState } = useContext(AuthContext);
+
+    const role = authState.isAdmin === "isAdmin";
+    console.log(role);
+
+    const deleteUser = () => {
+        axios.delete(`user/${id}`, {
+            headers: { accessToken: localStorage.getItem("accessToken") }
+        })
+            .then((response) => {
+                setAuthState({ firstname: "", id: 0, isAdmin: "", status: false });
+                alert(authState.status);
+                history.push("/");
+            });
+    };
 
     useEffect(() => {
-        let id = '';
-        let token = JSON.parse(localStorage.getItem('accessToken'));
-        checkUser().then((res) => {
-            console.log(res);
-            id = res.id;
-            axios.get(`/user/${id}`, { headers: { "Authorizations": token } }).then((response) => {
-                console.log(response);
-                setFirstname(response.data.user.firstname);
-                setLastname(response.data.user.lastname);
-                setEmail(response.data.user.email);
+        axios.get(`user/${id}`, { headers: { 'Authorizations': JSON.parse(localStorage.getItem('accessToken')) } })
+            .then((response) => {
+                setFirstname(response.data.firstname);
+                setLastname(response.data.lastname);
+                setEmail(response.data.email);
+                setRoleProfile(response.data.isAdmin);
             });
-        });
-    }, []);
+    }, [id]);
 
     return (
         <div className="basicInfo">
+            {" "}
             <p className='firstname'>Prénom : {firstname}</p>
             <p className='lastname'>Nom : {lastname}</p>
             <p className='email'>Email : {email}</p>
-            <button className='passwordBttn' onClick={() => {
-                history("/changepassword");
-            }}>Changer le mot de passe</button>
+            <p className='role'>Profil : {roleProfile}</p>
+            {authState.firstname === firstname ? (
+                <button className='passwordBttn' onClick={() => {
+                    history(`/changepassword/${id}`);
+                }}>
+                    {" "}
+                    Changer le mot de passe</button>
+            ) : (
+                ""
+            )}
+            <p className='deleteAccount'>Effacer le compte</p>
+            {authState.firstname === firstname || role === true ? (
+                <button className='deleteBttn' onClick={deleteUser}></button>
+            ) : (
+                ""
+            )}
         </div>
     );
 }

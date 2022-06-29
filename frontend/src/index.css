@@ -27,13 +27,8 @@ h1 {
   margin-bottom: 1rem;
 }
 
-h4 {
-  margin-left: 20px;
-}
-
 section {
   padding: 1rem 1rem 2rem 1rem;
-  width: 20rem;
   margin: auto;
   margin-top: 2rem;
   margin-bottom: 2rem;
@@ -185,7 +180,6 @@ button {
   display: flex;
   flex-direction: column;
   margin-top: 1rem;
-  margin-left: 1rem;
 }
 
 .commentBttn {
