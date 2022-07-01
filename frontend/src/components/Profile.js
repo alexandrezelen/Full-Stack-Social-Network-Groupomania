@@ -1,65 +1,72 @@
-import React, { useEffect, useState, useContext } from 'react';
 import axios from '../api/axios';
-import { useNavigate, useParams } from 'react-router-dom';
-import { AuthContext } from '../helpers/AuthContext';
+import React, { useEffect, useState } from 'react';
+import { checkUser } from '../components/Tool';
+import { useParams } from 'react-router-dom';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import { useNavigate } from 'react-router-dom';
 
-function Profile({ user }) {
-    let { id } = useParams();
+function Profile() {
     let history = useNavigate();
-
+    let id = '';
     const [firstname, setFirstname] = useState('');
     const [lastname, setLastname] = useState('');
     const [email, setEmail] = useState('');
-    const [roleProfile, setRoleProfile] = useState("false");
-    const { authState, setAuthState } = useContext(AuthContext);
 
-    const role = authState.isAdmin === "isAdmin";
-    console.log(role);
-
-    const deleteUser = () => {
-        axios.delete(`user/${id}`, {
-            headers: { accessToken: localStorage.getItem("accessToken") }
-        })
-            .then((response) => {
-                setAuthState({ firstname: "", id: 0, isAdmin: "", status: false });
-                alert(authState.status);
-                history.push("/");
+    const deleteAccount = () => {
+        let token = JSON.parse(localStorage.getItem('accessToken'));
+        checkUser().then((res) => {
+            id = res.id;
+            console.log(id);
+            axios.delete(`/user/${id}`, { headers: { "Authorizations": token } }).then((response) => {
+                console.log(response);
+                history('/');
             });
+            ;
+        });
     };
 
     useEffect(() => {
-        axios.get(`user/${id}`, { headers: { 'Authorizations': JSON.parse(localStorage.getItem('accessToken')) } })
-            .then((response) => {
-                setFirstname(response.data.firstname);
-                setLastname(response.data.lastname);
-                setEmail(response.data.email);
-                setRoleProfile(response.data.isAdmin);
+        let token = JSON.parse(localStorage.getItem('accessToken'));
+        checkUser().then((res) => {
+            id = res.id;
+            console.log(id);
+            axios.get(`/user/${id}`, { headers: { "Authorizations": token } }).then((response) => {
+                console.log(response);
+                setFirstname(response.data.user.firstname);
+                setLastname(response.data.user.lastname);
+                setEmail(response.data.user.email);
             });
-    }, [id]);
+            ;
+        });
+    }, []);
+
+    // const editFirstname = () => {
+    //     let newFirstname = prompt("Modifier le prénom : ");
+    //     checkUser().then((res) => {
+    //         id = res.id;
+    //         console.log(id);
+    //         axios.patch(`/user/${id}`,
+    //             { firstname: newFirstname },
+    //             Headers
+    //         ).then(response => {
+    //             setFirstname({ ...firstname });
+    //         }).catch(error => { console.log(error); });
+    //     });
+    // };
 
     return (
+
         <div className="basicInfo">
-            {" "}
-            <p className='firstname'>Prénom : {firstname}</p>
-            <p className='lastname'>Nom : {lastname}</p>
-            <p className='email'>Email : {email}</p>
-            <p className='role'>Profil : {roleProfile}</p>
-            {authState.firstname === firstname ? (
-                <button className='passwordBttn' onClick={() => {
-                    history(`/changepassword/${id}`);
-                }}>
-                    {" "}
-                    Changer le mot de passe</button>
-            ) : (
-                ""
-            )}
-            <p className='deleteAccount'>Effacer le compte</p>
-            {authState.firstname === firstname || role === true ? (
-                <button className='deleteBttn' onClick={deleteUser}></button>
-            ) : (
-                ""
-            )}
+            {/* <p onClick={() => {
+                editFirstname("firstname");
+            }}>{firstname}</p> */}
+            <p>{firstname}</p>
+            <p>{lastname}</p>
+            <p>{email}</p>
+            <FontAwesomeIcon onClick={deleteAccount} icon={faTrashCan} className="trash" />
         </div>
+
     );
 }
 

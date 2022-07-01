@@ -52,7 +52,7 @@ exports.getMe = (req, res, next) => {
 
 exports.getProfile = (req, res, next) => {
     User.findOne({
-        attributes: ["firstname", "lastname", "email", "department", "profilePicture"],
+        attributes: ["firstname", "lastname", "email"],
         where: { id: req.params.id }
     })
         .then(user => res.status(200).json({
@@ -66,6 +66,16 @@ exports.getProfile = (req, res, next) => {
         .catch(err => res.status(418).json(err));
 };
 
+// exports.getProfile = async (req, res, next) => {
+//     const id = req.params.id;
+
+//     const getProfile = await User.findByPk(id, {
+//         attributes: { exclude: ["password"] }
+//     });
+
+//     res.json(getProfile);
+// };
+
 exports.updateUser = (req, res, next) => {
     if (req.UserId != req.params.id && req.isAdmin !== true) { return res.status(400).json({ message: "Non autorisé" }); }
     else {
@@ -73,7 +83,6 @@ exports.updateUser = (req, res, next) => {
             email: req.body.email,
             firstname: req.body.firstname,
             lastname: req.body.lastname,
-            department: req.body.department
         }, { where: { id: req.params.id } })
             .then(user => { return res.status(200).json(user); })
             .catch(err => { return res.status(400).json(err); });
@@ -98,54 +107,17 @@ exports.updatePassword = async (req, res) => {
     }
 };
 
-exports.updatePicture = async (req, res) => {
-    // Vérifie qu'il y a bien une image et que l'utilisateur(rice) a les droits pour agir
-    if (!req.file) { return res.status(400).json({ message: "Il n'y a pas d'image incluse." }); }
-    if (req.UserId != req.params.id && req.isAdmin !== true) { return res.status(400).json({ message: "Non autorisé" }); }
-
-    User.findOne({ where: { id: req.UserId } })
-        .then(userModify => {
-            const oldUrl = User.profilePicture.split('/images/')[1];
-            if (req.file) {
-            }
-        })
-        .then((user) => {
-            if (!user.profilePicture) {
-                let picture = "";
-                User.update({ profilePicture: picture }, { where: req.params.id });
-                // `${req.protocol}://${req.get("host")}/images/${ req.file.filename }`;
-            } else {
-                //fs.unlink
-                fs.unlink(`images/${filename}`, () => {
-                    User.destroy({ where: { id: id } });
-                    res.status(200).json({ message: 'profil supprimé' })
-                        .catch(err => res.status(403).json({ error }));
-                });
-            }
-        })
-        .catch(err => res.status(400).json(err));
-};
-
 exports.deleteUser = async (req, res, next) => {
+    console.log(req.UserId);
     if (req.UserId != req.params.id && req.isAdmin !== true) { return res.status(400).json({ message: "Non autorisé" }); }
+   
     else {
-        try {
-            const id = req.params.id;
-            const user = await User.findOne({ where: { id: id } });
-            if (user.profilePicture !== null) {
-                const filename = user.profilePicture.split("/images")[1];
-                fs.unlink(`images/${filename}`, () => {
-                    User.destroy({ where: { id: id } });
-                    res.status(200).json({ message: 'profil supprimé' })
-                        .catch(err => res.status(403).json({ error }));
-                });
-            } else {
-                User.destroy({ where: { id: id } });
+        await User.findOne({ where: { id: req.params.id } });
+        User.destroy({ where: { id: req.params.id } })
+            .then(() => {
                 res.status(200).json({ message: 'profil supprimé' });
-            }
-        } catch (error) {
-            res.status(500).send({ error: 'Erreur serveur' });
-        }
-    }
 
+            })
+            .catch(err => res.status(403).json({ error }));
+    }
 };

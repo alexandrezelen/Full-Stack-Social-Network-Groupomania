@@ -2,7 +2,6 @@ import { useRef, useState, useEffect, useContext } from 'react';
 import axios from '../api/axios';
 import { Link } from 'react-router-dom';
 import * as tools from './Tool';
-import { AuthContext } from '../helpers/AuthContext';
 
 const Login = () => {
     const emailRef = useRef();
@@ -11,8 +10,6 @@ const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [errMsg, setErrMsg] = useState('');
-
-    const { setAuthState } = useContext(AuthContext);
 
     useEffect(() => {
         emailRef.current.focus();
@@ -30,8 +27,6 @@ const Login = () => {
             const response = await axios.post(tools.memo.LOGIN_URL, { ...userForm });
             console.log(response.data);
             localStorage.setItem("accessToken", JSON.stringify(response.data));
-
-            setAuthState(true)
 
             return tools.redirectToHome();
 
@@ -75,6 +70,7 @@ const Login = () => {
                     value={password}
                     required
                 />
+
                 <button>Se connecter</button>
             </form>
             <p>

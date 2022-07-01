@@ -8,8 +8,8 @@ exports.createComment = async (req, res) => {
     const comment = { text: req.body.text, UserId: req.UserId, PostId: Number(req.params.postId) };
     try {
         let createComment = await Comment.create(comment);
-        let userData = await User.findOne({ attributes:{exclude: ['password']} , where: {id : req.UserId } })
-        res.status(201).json({userData, message: "Commentaire créé" });
+        let userData = await User.findOne({ attributes: { exclude: ['password'] }, where: { id: req.UserId } });
+        res.status(201).json({ userData, message: "Commentaire créé" });
     }
     catch (err) { err => res.status(400).json(err); }
 };

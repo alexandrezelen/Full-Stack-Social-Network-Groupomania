@@ -39,19 +39,10 @@ module.exports = (sequelize, Datatypes) => {
             allowNull: false,
             require: true,
         },
-        profilePicture: {
-            type: Datatypes.STRING(200),
-            allowNull: true
-        },
-        department: {
-            type: Datatypes.STRING(100),
-            allowNull: true
-        },
         isAdmin: {
             type: Datatypes.BOOLEAN,
             defaultValue: false,
         },
-
     },
         { timestamps: false });
 

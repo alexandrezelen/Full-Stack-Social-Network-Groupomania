@@ -27,6 +27,7 @@ function CreatePost() {
             .then((response) => { history("/"); })
             .catch(err => console.log(err));
     };
+
     return (
         <div className="createPostPage">
             <Formik initialValues={initialValues} onSubmit={onSubmit} validationSchema={validationSchema}>
@@ -51,6 +52,7 @@ function CreatePost() {
                                 formProps.setFieldValue("image", event.currentTarget.files[0]);
                             }}
                         />
+
                         <button type="submit">Créer un Post</button>
                     </Form>
                 )}
