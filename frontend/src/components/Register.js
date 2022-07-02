@@ -1,8 +1,8 @@
+import axios from '../api/axios';
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import { useRef, useState, useEffect } from "react";
 import { faCheck, faTimes, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import axios from '../api/axios';
 import { Link } from 'react-router-dom';
 
 const FIRSTNAME_REGEX = /^(?=.*[a-z])/;

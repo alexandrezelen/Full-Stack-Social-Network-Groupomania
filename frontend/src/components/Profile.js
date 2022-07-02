@@ -28,7 +28,7 @@ function Profile() {
     useEffect(() => {
         let token = JSON.parse(localStorage.getItem('accessToken'));
         checkUser().then((res) => {
-             // eslint-disable-next-line react-hooks/exhaustive-deps
+            // eslint-disable-next-line react-hooks/exhaustive-deps
             id = res.id;
             console.log(id);
             axios.get(`/user/${id}`, { headers: { "Authorizations": token } }).then((response) => {
@@ -42,14 +42,12 @@ function Profile() {
     }, [id]);
 
     return (
-
         <div className="basicInfo">
             <p>{firstname}</p>
             <p>{lastname}</p>
             <p>{email}</p>
             <FontAwesomeIcon onClick={deleteAccount} icon={faTrashCan} className="trash" />
         </div>
-
     );
 }
 

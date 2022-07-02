@@ -11,6 +11,8 @@ root.render(
             <Link to="/">Fil d'actualité</Link>
             <Link to="/createpost">Créer un Post</Link>
             <Link to="/profile">Profil</Link>
+            <Link to="/login">S'identifier</Link>
+            <Link to="/register">S'enregistrer</Link>
             <Link to="/login" onClick={e => localStorage.removeItem("accessToken")}>Se déconnecter</Link>
         </div>
         <Routes>

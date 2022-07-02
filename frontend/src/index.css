@@ -35,7 +35,7 @@ section {
   padding: 1rem 1rem 2rem 1rem;
   margin: 2rem;
   border-radius: 1rem;
-  background-color: rgba(0, 0, 0, 0.4);
+  background-color: rgba(0, 0, 0, 0.1);
 }
 
 form {
@@ -76,18 +76,16 @@ input[type="text"] {
   font-size: 22px;
   padding: 0.25rem;
   border-radius: 0.5rem;
-  align-self: center;
 }
 
 label {
   margin-bottom: 1rem;
+  margin-top: 1rem;
   align-self: center;
 }
 
 button {
   margin-top: 2rem;
-  width: 10rem;
-  align-self: center;
   padding: 0.5rem;
 }
 

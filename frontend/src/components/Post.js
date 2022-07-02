@@ -100,8 +100,7 @@ function Post(post) {
                         editText("text");
                     }}>{postObject.text}</p>
                     <h3 className="userId">{postObject.User.firstname} {postObject.User.lastname}</h3>
-                    <Formik initialValues={initialValues} onSub
-                    mit={onSubmit}>
+                    <Formik initialValues={initialValues} onSubmit={onSubmit}>
                         {(formProps) => (
                             <Form>
                                 {/* eslint-disable-next-line */}

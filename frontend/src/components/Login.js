@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect, useContext } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import axios from '../api/axios';
 import { Link } from 'react-router-dom';
 import * as tools from './Tool';
@@ -21,15 +21,11 @@ const Login = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
         try {
             const userForm = { email: email, password: password };
             const response = await axios.post(tools.memo.LOGIN_URL, { ...userForm });
-            console.log(response.data);
             localStorage.setItem("accessToken", JSON.stringify(response.data));
-
             return tools.redirectToHome();
-
         } catch (err) {
             if (!err?.response) {
                 setErrMsg('Pas de réponse du serveur');
@@ -60,7 +56,6 @@ const Login = () => {
                     value={email}
                     required
                 />
-
                 <label htmlFor="password">Mot de passe :</label>
                 <input
                     type="password"
@@ -70,7 +65,6 @@ const Login = () => {
                     value={password}
                     required
                 />
-
                 <button>Se connecter</button>
             </form>
             <p>

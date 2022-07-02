@@ -1,27 +1,22 @@
+import axios from '../api/axios';
 import React from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from 'yup';
-import axios from '../api/axios';
 import { useNavigate } from 'react-router-dom';
 
 function CreatePost() {
-
     let history = useNavigate();
-
     const initialValues = {
         title: "",
         text: "",
         postImage: {},
     };
-
     const validationSchema = Yup.object().shape({
         title: Yup.string().required("Champ vide !"),
         text: Yup.string().required("Champ vide !"),
     });
-
     const onSubmit = (data) => {
         console.log(data);
-
         const token = JSON.parse(localStorage.getItem('accessToken'));
         axios.post("/post/", data, { headers: { 'Authorizations': token, "Content-Type": "multipart/form-data" } })
             .then((response) => { history("/"); })
@@ -34,15 +29,15 @@ function CreatePost() {
                 {(formProps) => (
                     <Form className="formContainer">
                         <h1>Post</h1>
-                        <label>Titre :</label>
+                        <label htmlFor='title'>Titre :</label>
                         <ErrorMessage name="title" component="span" />
                         <Field autoComplete="off" id="inputCreatePost" name="title" placeholder="..." />
 
-                        <label>Texte :</label>
+                        <label htmlFor='text'>Texte :</label>
                         <ErrorMessage name="text" component="span" />
                         <Field autoComplete="off" id="inputCreatePost" name="text" placeholder="..." />
 
-                        <label>Image :</label>
+                        <label htmlFor='postImage'>Image :</label>
                         <input
                             type='file'
                             name='postImage'
@@ -52,7 +47,6 @@ function CreatePost() {
                                 formProps.setFieldValue("image", event.currentTarget.files[0]);
                             }}
                         />
-
                         <button type="submit">Créer un Post</button>
                     </Form>
                 )}
