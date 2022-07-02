@@ -42,6 +42,8 @@ form {
   display: flex;
   flex-direction: column;
   padding-bottom: 1rem;
+  margin-left: 1rem;
+  margin-right: 1rem;
 }
 
 a,
@@ -85,7 +87,7 @@ label {
 }
 
 button {
-  margin-top: 2rem;
+  margin-top: 1rem;
   padding: 0.5rem;
 }
 
@@ -154,7 +156,7 @@ button {
   display: flex;
   flex-direction: column;
   padding: 1rem 1rem 2rem 1rem;
-  background-color: rgba(0, 0, 0, 0.4);
+  background-color: rgba(0, 0, 0, 0.1);
   border-radius: 1rem;
 }
 
@@ -186,6 +188,8 @@ button {
   margin: 1rem;
   padding: 1rem;
   border-radius: 0.5rem;
+  display: flex;
+  flex-direction: column;
 }
 
 /* Fil d'acutalité */
@@ -227,4 +231,8 @@ button {
 
 #postImage {
   align-self: center;
+}
+
+.deleteAccount {
+  margin-top: 1rem;
 }

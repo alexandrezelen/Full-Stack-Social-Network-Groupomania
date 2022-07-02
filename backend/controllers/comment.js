@@ -44,10 +44,8 @@ exports.deleteComment = async (req, res, next) => {
     await Comment.findOne({ where: { id: req.params.id } })
         .then((comment) => { req.commentCreatorId = comment.UserId; })
         .catch(err => res.status(400).json(err));
-
     if (req.UserId !== req.commentCreatorId && req.isAdmin !== true) { return res.status(400).json({ message: "Non autorisé" }); }
-
     Comment.destroy({ where: { id: req.params.id } })
         .then(() => res.status(200).json({ message: "Le commentaire a été supprimé" }))
-        .catch(err => res.status(400).json(err));
+        .catch(err => res.status(400).json({err}));
 };
