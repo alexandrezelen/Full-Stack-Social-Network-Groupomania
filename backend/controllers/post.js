@@ -45,7 +45,7 @@ exports.updatePost = async (req, res) => {
             imageName = post.postImage.split('/images/')[1];
         })
         .catch(err => res.status(400).json(err));
-    if (req.UserId != req.postCreatorId && req.isAdmin !== true) { return res.status(400).json({ message: "Non autorisé" }); }
+    if (req.UserId !== req.postCreatorId && req.isAdmin !== true) { return res.status(400).json({ message: "Non autorisé" }); }
     else {
         const bodyObject = req.file ? {
             ...req.body,
@@ -65,9 +65,10 @@ exports.deletePost = async (req, res, id = 0, imageName = "") => {
             imageName = post.postImage.split('/images/')[1];
         })
         .catch(err => res.status(400).json(err));
-    if (req.UserId != req.postCreatorId && req.isAdmin !== true) { return res.status(400).json({ message: "Non autorisé" }); }
+    if (req.UserId !== req.postCreatorId && req.isAdmin !== true) { return res.status(400).json({ message: "Non autorisé" }); }
     await fs.unlink(`images/${imageName}`, () => { });
     Post.destroy({ where: { id: req.params.id } })
         .then(() => res.status(200).json({ message: "Le post a été supprimé" }))
         .catch(err => res.status(400).json({ err }));
 };
+

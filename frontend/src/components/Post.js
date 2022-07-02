@@ -1,36 +1,19 @@
 import { useEffect, useState } from 'react';
-// import { useNavigate } from 'react-router-dom';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import axios from '../api/axios';
-import { Formik, Form, Field, ErrorMessage } from "formik";
-
-
-
-// import { useForm } from "react-hook-form";
+import { Formik, Form } from "formik";
 
 function Post(post) {
-
-    let history = useNavigate();
-
-    const [load, setLoader] = useState(true);
+    const Headers = { headers: { 'Authorizations': JSON.parse(localStorage.getItem('accessToken')) } };
+    const headerImage = { headers: { 'Content-Type': 'multipart/form-data', 'Authorizations': JSON.parse(localStorage.getItem('accessToken')) } };
     const { id } = useParams();
     const postId = id;
+    const [load, setLoader] = useState(true);
     const [postObject, setPostObject] = useState({ title: "title", text: 'text', postImage: "", User: { firstname: "firstname", lastname: "lastname" } });
     const [comments, setComments] = useState([]);
     const [newComment, setNewComment] = useState("");
-
-
-
-
-    const formData = new FormData();
-    const headerImage = { headers: { 'Content-Type': 'multipart/form-data', 'Authorizations': JSON.parse(localStorage.getItem('accessToken')) } };
-    const Headers = { headers: { 'Authorizations': JSON.parse(localStorage.getItem('accessToken')) } };
-
-    const initialValues = {
-        postImage: {}
-    };
-
-    // let history = useNavigate();
+    const initialValues = { postImage: {} };
+    const history = useNavigate();
 
     useEffect(() => {
         function getData() {
@@ -44,16 +27,16 @@ function Post(post) {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [id, postId, load]);
 
-    // useEffect(() => {
-    //     function getLoad() {
-    //         if (load) {
-    //             axios.get(`/post/${id}`, Headers).then((res) => { setLoader(true); }).catch(setLoader(false));
-    //         }
-    //     }
-    //     getLoad();
-    // }, [id]);
-
-    // -------------- edit ----------------- //
+    const onSubmit = (data) => {
+        axios.put(`/post/${postId}`,
+            data,
+            headerImage
+        ).then(response => {
+            setPostObject({ ...postObject });
+            setLoader(true);
+            console.log(response);
+        }).catch(error => { console.log(error); });
+    };
 
     const editTitle = () => {
         let newTitle = prompt("Nouveau titre : ");
@@ -77,21 +60,6 @@ function Post(post) {
         }).catch(error => { console.log(error); });
     };
 
-    // -------------- Edit Image ------------------- //
-
-    const onSubmit = (data) => {
-        axios.put(`/post/${postId}`,
-            data,
-            headerImage
-        ).then(response => {
-            setPostObject({ ...postObject });
-            setLoader(true);
-            console.log(response);
-        }).catch(error => { console.log(error); });
-    };
-
-    // ---------- Comments ---------- //
-
     const addComment = () => {
         axios.post(`/comment/${postId}`, { text: newComment, PostId: postId }, Headers)
             .then((res) => {
@@ -103,22 +71,22 @@ function Post(post) {
             .catch(error => console.log(error));
     };
 
-    // ------------- delete -------------- //
-
     const deletePost = (id) => {
         axios.delete(`/post/${id}`, Headers)
             .then(() => {
-                history.push("/");
-            });
+                alert('Post supprimé !');
+                history('/');
+            })
+            .catch(error => console.log(error));
     };
 
     const deleteComment = (id) => {
         axios.delete(`/comment/${id}`, Headers)
             .then(() => {
-                setComments(comments.filter((val) => {
-                    return val.id !== id;
-                }));
-            });
+                alert('Commentaire supprimé !');
+                history('/');
+            })
+            .catch(error => console.log(error));
     };
 
     return (
@@ -132,7 +100,6 @@ function Post(post) {
                         editText("text");
                     }}>{postObject.text}</p>
                     <h3 className="userId">{postObject.User.firstname} {postObject.User.lastname}</h3>
-
                     <Formik initialValues={initialValues} onSubmit={onSubmit}>
                         {(formProps) => (
                             <Form>
@@ -140,7 +107,6 @@ function Post(post) {
                                 <img className="postImage"
                                     src={postObject.postImage}
                                     alt="a post image" />
-
                                 <label htmlFor='postImage'>Choisir une image :</label>
                                 <input
                                     type='file'
@@ -151,17 +117,20 @@ function Post(post) {
                                         formProps.setFieldValue("image", e.currentTarget.files[0]);
                                     }}
                                 />
-
                                 <button type="submit">Modifier l'image</button>
                             </Form>
                         )}
                     </Formik>
+                    <Formik initialValues={initialValues}>
+                        <Form>
+                            <div className='deleteBttn'>
+                                <button type="submit" onClick={() => deletePost(postObject.id)}>Supprimer le Post</button>
+                            </div>
+                        </Form>
+                    </Formik>
                 </div>
             </article >
-
-            {/* // ---------- Comments ------------ // */}
-
-            <div className="downSide">
+            <article className="downSide">
                 <div className='addCommentContainer'>
                     <label htmlFor='commentInput'>Laisser un commentaire :</label>
                     <input type="text"
@@ -181,18 +150,18 @@ function Post(post) {
                                 <div className='comment__text'>
                                     <h4 key={key}>{user.firstname} {user.lastname}</h4>
                                     <p className='comment'>{comment.text}</p>
-                                    {/* <button className='smallBttn' onClick={() => {
+                                    <button className='smallBttn' onClick={() => {
                                         deleteComment(comment.id);
                                     }}
                                     >
                                         X
-                                    </button> */}
+                                    </button>
                                 </div>
                             </div>
                         );
                     })}
                 </div>
-            </div>
+            </article>
         </div >
     );
 };

@@ -54,7 +54,7 @@ db.comment = require('./Comment.js')(sequelize, Sequelize);
 // -- Associations -- //
 
 // Utilisateur
-db.user.hasMany(db.post);
+db.user.hasMany(db.post, { onDelete: "CASCADE" });
 db.user.hasMany(db.comment);
 
 // Post

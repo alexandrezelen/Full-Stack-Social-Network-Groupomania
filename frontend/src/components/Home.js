@@ -5,14 +5,13 @@ import { useNavigate } from 'react-router-dom';
 
 function Home() {
     const [listOfPosts, setListOfPosts] = useState([]);
-    
-    let history = useNavigate();
+    const history = useNavigate();
 
     useEffect(() => {
         axios.get("/post/", { headers: { 'Authorizations': JSON.parse(localStorage.getItem('accessToken')) } })
             .then((res) => { console.log(res); setListOfPosts(res.data); })
             .catch(err => console.log(err));
-    }, [listOfPosts]);
+    }, []);
 
     return (
         [...listOfPosts].reverse().map((value, key) => (

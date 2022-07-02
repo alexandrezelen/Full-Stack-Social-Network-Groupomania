@@ -1,7 +1,6 @@
 import axios from '../api/axios';
 import React, { useEffect, useState } from 'react';
 import { checkUser } from '../components/Tool';
-import { useParams } from 'react-router-dom';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from 'react-router-dom';
@@ -20,7 +19,7 @@ function Profile() {
             console.log(id);
             axios.delete(`/user/${id}`, { headers: { "Authorizations": token } }).then((response) => {
                 console.log(response);
-                history('/');
+                history('/login');
             });
             ;
         });
@@ -29,6 +28,7 @@ function Profile() {
     useEffect(() => {
         let token = JSON.parse(localStorage.getItem('accessToken'));
         checkUser().then((res) => {
+             // eslint-disable-next-line react-hooks/exhaustive-deps
             id = res.id;
             console.log(id);
             axios.get(`/user/${id}`, { headers: { "Authorizations": token } }).then((response) => {
@@ -39,28 +39,11 @@ function Profile() {
             });
             ;
         });
-    }, []);
-
-    // const editFirstname = () => {
-    //     let newFirstname = prompt("Modifier le prénom : ");
-    //     checkUser().then((res) => {
-    //         id = res.id;
-    //         console.log(id);
-    //         axios.patch(`/user/${id}`,
-    //             { firstname: newFirstname },
-    //             Headers
-    //         ).then(response => {
-    //             setFirstname({ ...firstname });
-    //         }).catch(error => { console.log(error); });
-    //     });
-    // };
+    }, [id]);
 
     return (
 
         <div className="basicInfo">
-            {/* <p onClick={() => {
-                editFirstname("firstname");
-            }}>{firstname}</p> */}
             <p>{firstname}</p>
             <p>{lastname}</p>
             <p>{email}</p>

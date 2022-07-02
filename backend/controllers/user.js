@@ -66,16 +66,6 @@ exports.getProfile = (req, res, next) => {
         .catch(err => res.status(418).json(err));
 };
 
-// exports.getProfile = async (req, res, next) => {
-//     const id = req.params.id;
-
-//     const getProfile = await User.findByPk(id, {
-//         attributes: { exclude: ["password"] }
-//     });
-
-//     res.json(getProfile);
-// };
-
 exports.updateUser = (req, res, next) => {
     if (req.UserId != req.params.id && req.isAdmin !== true) { return res.status(400).json({ message: "Non autorisé" }); }
     else {
@@ -89,34 +79,14 @@ exports.updateUser = (req, res, next) => {
     }
 };
 
-exports.updatePassword = async (req, res) => {
-    if (req.UserId != req.params.id && req.isAdmin !== true) { return res.status(400).json({ message: "Non autorisé" }); }
-    else {
-        const { oldPassword, newPassword } = req.body;
-        const user = await User.findOne({ where: { id: req.UserId } });
-        bcrypt.compare(oldPassword, user.password).then(async (match) => {
-            if (!match) res.json({ error: 'Mauvais mot de passe entré' });
-            bcrypt.hash(newPassword, 10).then((hash) => {
-                User.update(
-                    { password: hash },
-                    { where: { id: req.UserId } }
-                );
-                res.json('Mot de passe mis à jour');
-            });
-        });
-    }
-};
-
 exports.deleteUser = async (req, res, next) => {
     console.log(req.UserId);
     if (req.UserId != req.params.id && req.isAdmin !== true) { return res.status(400).json({ message: "Non autorisé" }); }
-   
     else {
         await User.findOne({ where: { id: req.params.id } });
         User.destroy({ where: { id: req.params.id } })
             .then(() => {
                 res.status(200).json({ message: 'profil supprimé' });
-
             })
             .catch(err => res.status(403).json({ error }));
     }
