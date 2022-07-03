@@ -22,12 +22,11 @@ body {
   padding: 1rem 0.5rem;
 }
 
-h4 {
-  font-style: italic;
+p {
+  padding: 3px;
 }
 
 .userId {
-  font-style: italic;
   margin-top: 10px;
 }
 
@@ -55,10 +54,7 @@ img {
   height: 50%;
   width: 50%;
   border-radius: 10px;
-  color: red;
   margin-top: 1rem;
-  border: black 1px solid;
-  padding: 1rem;
   margin-bottom: 2rem;
   align-self: center;
 }
@@ -84,6 +80,7 @@ label {
   margin-bottom: 1rem;
   margin-top: 1rem;
   align-self: center;
+  font-style: italic;
 }
 
 button {
@@ -148,7 +145,8 @@ button {
   text-decoration: none;
   display: flex;
   padding: 3px;
-  margin-left: 4px;
+  margin-left: 1rem;
+  margin-top: 0.5rem;
 }
 
 /* createPost */
@@ -176,7 +174,7 @@ button {
 .addCommentContainer {
   display: flex;
   flex-direction: column;
-  margin-top: 3rem;
+  margin-top: 2rem;
   margin-left: 1rem;
   margin-right: 1rem;
 }
@@ -211,8 +209,7 @@ button {
 
 .basicInfo {
   margin-top: 4rem;
-  display: flex;
-  flex-direction: column;
+  margin-left: 1rem;
   align-items: center;
 }
 

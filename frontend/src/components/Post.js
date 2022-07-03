@@ -15,7 +15,6 @@ function Post(post) {
     const initialValues = { postImage: {} };
     const history = useNavigate();
 
-
     useEffect(() => {
         function getData() {
             if (load) {
@@ -99,14 +98,20 @@ function Post(post) {
                 <div className="post" id="individual">
                     <h1 className="title" onClick={() => {
                         editTitle("title");
-                    }}> {postObject.title}</h1>
+                    }}>Titre : {postObject.title}</h1>
                     <p className="text" onClick={() => {
                         editText("text");
-                    }}>{postObject.text}</p>
-                    <h3 className="userId">{postObject.User.firstname} {postObject.User.lastname}</h3>
-                    <Formik initialValues={initialValues} onSubmit={onSubmit} validator={()=>({})}>
+                    }}>Texte : {postObject.text}</p>
+                    <h3 className="userId">Auteur(e) : {postObject.User.firstname}{postObject.User.lastname}</h3>
+                    <Formik initialValues={initialValues} onSubmit={onSubmit} validator={() => ({})}>
                         {(formProps) => (
                             <Form>
+                                {/* eslint-disable-next-line */}
+                                {/* {postObject.postImage &&
+                                    <img className="postImage"
+                                        src={postObject.postImage}
+                                        alt="a post image" />
+                                    } */}
                                 {/* eslint-disable-next-line */}
                                 <img className="postImage"
                                     src={postObject.postImage}

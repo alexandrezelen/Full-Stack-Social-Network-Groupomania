@@ -43,10 +43,10 @@ function Profile() {
 
     return (
         <div className="basicInfo">
-            <p>{firstname}</p>
-            <p>{lastname}</p>
-            <p>{email}</p>
-            <p className='deleteAccount'>Supprimer son compte ?</p>
+            <p>Prénom : {firstname}</p>
+            <p>Nom : {lastname}</p>
+            <p>Email : {email}</p>
+            <p className='deleteAccount'>Suppression du compte ?</p>
             <FontAwesomeIcon onClick={deleteAccount} icon={faTrashCan} className="trash" />
         </div>
     );

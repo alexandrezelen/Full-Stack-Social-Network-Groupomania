@@ -1,4 +1,5 @@
 const express = require("express");
+const jwt = require('jsonwebtoken');
 const router = express.Router();
 const db = require('../models');
 const Post = db.post;
@@ -65,11 +66,12 @@ exports.deletePost = async (req, res, id = 0, imageName = "") => {
             imageName = post.postImage.split('/images/')[1];
         })
         .catch(err => res.status(400).json(err));
-    if (req.UserId !== req.postCreatorId && req.isAdmin !== true) 
-    { res.status(400).json({ message: "Non autorisé" }); }
-    await fs.unlink(`images/${imageName}`, () => { });
-    Post.destroy({ where: { id: req.params.id } })
-        .then(() => res.status(200).json({ message: "Le post a été supprimé" }))
-        .catch(err => res.status(400).json({ err }));
+    if (req.UserId !== req.postCreatorId && req.isAdmin !== true) { res.status(400).json({ message: "Non autorisé" }); }
+    else {
+        await fs.unlink(`images/${imageName}`, () => { });
+        Post.destroy({ where: { id: req.params.id } })
+            .then(() => res.status(200).json({ message: "Le post a été supprimé" }))
+            .catch(err => res.status(400).json({ err }));
+    }
 };
 
