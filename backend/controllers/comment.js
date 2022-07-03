@@ -27,28 +27,16 @@ exports.getAllComments = async (req, res) => {
     catch (err) { err => res.status(400).json(err); }
 };
 
-exports.updateComment = async (req, res, next) => {
-    await Comment.findOne({ where: { id: req.params.id } })
-        .then((comment) => { req.commentCreatorId = comment.UserId; })
-        .catch(err => res.status(400).json(err));
-
-    if (req.UserId != req.commentCreatorId && req.isAdmin !== true) { return res.status(400).json({ message: "Non autorisé" }); }
-
-
-    Comment.update({ text: req.body.text }, { where: { id: req.params.id } })
-        .then(() => res.status(200).json({ message: 'Commentaire modifié' }))
-        .catch(err => res.status(400).json(err));
-};
-
 exports.deleteComment = async (req, res, next) => {
     await Comment.findOne({ where: { id: req.params.id } })
         .then((comment) => { req.commentCreatorId = comment.UserId; })
         .catch(err => res.status(400).json(err));
+
     if (req.UserId !== req.commentCreatorId && req.isAdmin !== true) {
         res.status(400).json({ message: "Non autorisé" });
-    } else {
-        Comment.destroy({ where: { id: req.params.id } })
-            .then(() => res.status(200).json({ message: "Le commentaire a été supprimé" }))
-            .catch(err => res.status(400).json({ err }));
+        return;
     }
+    Comment.destroy({ where: { id: req.params.id } })
+        .then(() => res.status(200).json({ message: "Le commentaire a été supprimé" }))
+        .catch(err => res.status(400).json(err));
 };

@@ -15,6 +15,7 @@ function Post(post) {
     const initialValues = { postImage: {} };
     const history = useNavigate();
 
+
     useEffect(() => {
         function getData() {
             if (load) {
@@ -28,6 +29,7 @@ function Post(post) {
     }, [id, postId, load]);
 
     const onSubmit = (data) => {
+        console.log(data);
         axios.put(`/post/${postId}`,
             data,
             headerImage
@@ -64,14 +66,16 @@ function Post(post) {
         axios.post(`/comment/${postId}`, { text: newComment, PostId: postId }, Headers)
             .then((res) => {
                 let user = res.data.userData;
+                // eslint-disable-next-line
                 const commentToAdd = { text: newComment, User: { firstname: user.firstname, lastname: user.lastname } };
-                setComments([...comments, commentToAdd]);
+                setLoader(true);
                 setNewComment("");
             })
             .catch(error => console.log(error));
     };
 
     const deletePost = (id) => {
+        console.log(id);
         axios.delete(`/post/${id}`, Headers)
             .then(() => {
                 alert('Post supprimé !');
@@ -100,7 +104,7 @@ function Post(post) {
                         editText("text");
                     }}>{postObject.text}</p>
                     <h3 className="userId">{postObject.User.firstname} {postObject.User.lastname}</h3>
-                    <Formik initialValues={initialValues} onSubmit={onSubmit}>
+                    <Formik initialValues={initialValues} onSubmit={onSubmit} validator={()=>({})}>
                         {(formProps) => (
                             <Form>
                                 {/* eslint-disable-next-line */}

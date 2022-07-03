@@ -89,6 +89,8 @@ label {
 button {
   margin-top: 1rem;
   padding: 0.5rem;
+  width: 10rem;
+  align-self: center;
 }
 
 .instructions {
@@ -235,4 +237,5 @@ button {
 
 .deleteAccount {
   margin-top: 1rem;
+  font-style: italic;
 }
