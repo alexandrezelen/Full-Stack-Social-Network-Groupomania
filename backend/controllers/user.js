@@ -30,8 +30,9 @@ exports.signup = (req, res, next) => {
 exports.login = async (req, res, next) => {
     const { email, password } = req.body;
     const user = await User.findOne({ where: { email: email } });
-    if (!user) { return res.status(400).json({ error: "Utilisateur non trouvé" }); }
-    else {
+    if (!user) {
+        return res.status(400).json({ error: "Utilisateur non trouvé" });
+    } else {
         bcrypt.compare(password, user.password).then((match) => {
             if (!match) { return res.status(401).json({ error: "Email et/ou mot de passe incorrect(s)" }); }
             const accessToken = sign(
@@ -67,7 +68,7 @@ exports.getProfile = (req, res, next) => {
 };
 
 exports.updateUser = (req, res, next) => {
-    if (req.UserId != req.params.id && req.isAdmin !== true) { return res.status(400).json({ message: "Non autorisé" }); }
+    if (req.UserId != req.params.id && req.isAdmin !== true) { return res.status(403).json({ message: "Non autorisé" }); }
     else {
         User.update({
             email: req.body.email,
@@ -81,7 +82,7 @@ exports.updateUser = (req, res, next) => {
 
 exports.deleteUser = async (req, res, next) => {
     console.log(req.UserId);
-    if (req.UserId != req.params.id && req.isAdmin !== true) { return res.status(400).json({ message: "Non autorisé" }); }
+    if (req.UserId != req.params.id && req.isAdmin !== true) { return res.status(403).json({ message: "Non autorisé" }); }
     else {
         await User.findOne({ where: { id: req.params.id } });
         User.destroy({ where: { id: req.params.id } })

@@ -4,6 +4,8 @@ import { useRef, useState, useEffect } from "react";
 import { faCheck, faTimes, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from 'react-router-dom';
+import '../navigation.css';
+
 
 const FIRSTNAME_REGEX = /^(?=.*[a-z])/;
 const LASTNAME_REGEX = /^(?=.*[a-z])/;
@@ -73,6 +75,7 @@ const Register = () => {
         setErrMsg('');
     }, [email, password, matchPassword]);
 
+    // This function will receive the form data if form validation is successful.
     const handleSubmit = async (e) => {
         e.preventDefault();
         const v1 = FIRSTNAME_REGEX.test(firstname);

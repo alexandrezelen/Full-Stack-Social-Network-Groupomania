@@ -8,6 +8,7 @@ import Profile from './components/Profile';
 
 function App() {
     return (
+        // Enables the navigation among views of various components
         <Routes>
             <Route path="/" element={<Home />} />
             <Route path="createpost" element={<CreatePost />} />

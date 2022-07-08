@@ -1,9 +1,11 @@
+
 import React from 'react';
 import axios from '../api/axios';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 function Home() {
+// The React useState Hook allows us to track state in a function component.
     const [listOfPosts, setListOfPosts] = useState([]);
     const history = useNavigate();
 

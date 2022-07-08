@@ -33,7 +33,7 @@ exports.deleteComment = async (req, res, next) => {
         .catch(err => res.status(400).json(err));
 
     if (req.UserId !== req.commentCreatorId && req.isAdmin !== true) {
-        res.status(400).json({ message: "Non autorisé" });
+        res.status(403).json({ message: "Non autorisé" });
         return;
     }
     Comment.destroy({ where: { id: req.params.id } })

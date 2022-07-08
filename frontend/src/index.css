@@ -47,7 +47,7 @@ form {
 
 a,
 a:visited {
-  color: black
+  color: black;
 }
 
 img {
@@ -180,7 +180,7 @@ button {
 }
 
 .commentBttn {
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
 }
 
 .comment__text {
@@ -235,4 +235,8 @@ button {
 .deleteAccount {
   margin-top: 1rem;
   font-style: italic;
+}
+
+#root a {
+  font-size: initial;
 }

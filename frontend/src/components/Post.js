@@ -1,7 +1,9 @@
+import axios from '../api/axios';
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import axios from '../api/axios';
 import { Formik, Form } from "formik";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
 
 function Post(post) {
     const Headers = { headers: { 'Authorizations': JSON.parse(localStorage.getItem('accessToken')) } };
@@ -13,12 +15,15 @@ function Post(post) {
     const [comments, setComments] = useState([]);
     const [newComment, setNewComment] = useState("");
     const initialValues = { postImage: {} };
+    // The useNavigate hook returns a function that lets you navigate programmatically, for example after a form is submitted.
     const history = useNavigate();
 
     useEffect(() => {
         function getData() {
             if (load) {
+                // We retrieve the posts 
                 axios.get(`/post/${id}`, Headers).then((res) => { setPostObject(res.data); }).catch(error => console.log(error)); setLoader(false);
+                // We retrieve comments 
                 axios.get(`/comment/${postId}`, Headers).then((res) => { setComments(res.data); }).catch(error => console.log(error)); setLoader(false);
             }
         }
@@ -27,8 +32,10 @@ function Post(post) {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [id, postId, load]);
 
+    // onSubmit execute a JavaScript when a form is submitted
     const onSubmit = (data) => {
         console.log(data);
+        // Modification of the post
         axios.put(`/post/${postId}`,
             data,
             headerImage
@@ -39,6 +46,7 @@ function Post(post) {
         }).catch(error => { console.log(error); });
     };
 
+    // Modification of the title
     const editTitle = () => {
         let newTitle = prompt("Nouveau titre : ");
         axios.put(`/post/${postId}`,
@@ -50,6 +58,7 @@ function Post(post) {
         }).catch(error => { console.log(error); });
     };
 
+    // Modification of the text
     const editText = () => {
         let newText = prompt("Nouveau texte : ");
         axios.put(`/post/${postId}`,
@@ -61,6 +70,7 @@ function Post(post) {
         }).catch(error => { console.log(error); });
     };
 
+    // Add a comment
     const addComment = () => {
         axios.post(`/comment/${postId}`, { text: newComment, PostId: postId }, Headers)
             .then((res) => {
@@ -73,6 +83,7 @@ function Post(post) {
             .catch(error => console.log(error));
     };
 
+    // Delete the Post
     const deletePost = (id) => {
         console.log(id);
         axios.delete(`/post/${id}`, Headers)
@@ -83,6 +94,7 @@ function Post(post) {
             .catch(error => console.log(error));
     };
 
+    // Delete one comment
     const deleteComment = (id) => {
         axios.delete(`/comment/${id}`, Headers)
             .then(() => {
@@ -96,22 +108,20 @@ function Post(post) {
         <div key={String(post.id)} className="postPage">
             <article className="upSide">
                 <div className="post" id="individual">
+                    {/* The click event is raised when the user clicks on an element.  */}
                     <h1 className="title" onClick={() => {
                         editTitle("title");
                     }}>Titre : {postObject.title}</h1>
+                    {/* The click event is raised when the user clicks on an element.  */}
                     <p className="text" onClick={() => {
                         editText("text");
                     }}>Texte : {postObject.text}</p>
-                    <h3 className="userId">Auteur(e) : {postObject.User.firstname}{postObject.User.lastname}</h3>
+                    <h3 className="userId">Auteur(e) : {postObject.User.firstname} {postObject.User.lastname}</h3>
+                    {/* <Formik> is a component that helps you with building forms. */}
                     <Formik initialValues={initialValues} onSubmit={onSubmit} validator={() => ({})}>
+                        {/* Just like in HTML, React uses forms to allow users to interact with the web page. */}
                         {(formProps) => (
                             <Form>
-                                {/* eslint-disable-next-line */}
-                                {/* {postObject.postImage &&
-                                    <img className="postImage"
-                                        src={postObject.postImage}
-                                        alt="a post image" />
-                                    } */}
                                 {/* eslint-disable-next-line */}
                                 <img className="postImage"
                                     src={postObject.postImage}
@@ -126,6 +136,7 @@ function Post(post) {
                                         formProps.setFieldValue("image", e.currentTarget.files[0]);
                                     }}
                                 />
+                                {/* <i className="fas fa-camera"></i> */}
                                 <button type="submit">Modifier l'image</button>
                             </Form>
                         )}
@@ -133,7 +144,8 @@ function Post(post) {
                     <Formik initialValues={initialValues}>
                         <Form>
                             <div className='deleteBttn'>
-                                <button type="submit" onClick={() => deletePost(postObject.id)}>Supprimer le Post</button>
+                                {/* The click event is raised when the user clicks on an element.  */}
+                                <FontAwesomeIcon onClick={() => deletePost(postObject.id)} icon={faTrashCan} className="trash" />
                             </div>
                         </Form>
                     </Formik>
@@ -155,6 +167,7 @@ function Post(post) {
                     {comments.map((comment, key) => {
                         let user = { ...comment.User };
                         return (
+                            // The Math.random() function returns a floating-point, pseudo-random number in the range 0 to less than 1
                             <div key={Math.floor(Math.random() * 1000)} className='comment__box'>
                                 <div className='comment__text'>
                                     <h4 key={key}>{user.firstname} {user.lastname}</h4>

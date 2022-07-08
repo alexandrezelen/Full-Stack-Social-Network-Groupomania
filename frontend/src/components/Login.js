@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import * as tools from './Tool';
 
 const Login = () => {
+    // The useRef Hook allows you to persist values between renders.
     const emailRef = useRef();
     const errRef = useRef();
 
@@ -11,6 +12,7 @@ const Login = () => {
     const [password, setPassword] = useState('');
     const [errMsg, setErrMsg] = useState('');
 
+    // Accepts a function that contains imperative, possibly effectful code.
     useEffect(() => {
         emailRef.current.focus();
     }, []);
@@ -19,6 +21,7 @@ const Login = () => {
         setErrMsg('');
     }, [email, password]);
 
+    // This function will receive the form data if form validation is successful.
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
@@ -44,6 +47,7 @@ const Login = () => {
         <section>
             <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
             <h1>Connexion</h1>
+            {/* onSubmit execute a JavaScript when a form is submitted */}
             <form onSubmit={handleSubmit}>
                 <label htmlFor="email">Email :</label>
                 <input
